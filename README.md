@@ -11,6 +11,8 @@ A rule based proxy For Mac base on [Clash](https://github.com/Dreamacro/clash).
 ### <b>Please star [Clash](https://github.com/Dreamacro/clash) first, Thanks!</b>
 
 # Features
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fyichengchen%2FclashX.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fyichengchen%2FclashX?ref=badge_shield)
+
 
 HTTP/HTTPS and SOCKS proxy
 Surge like configuration
@@ -61,3 +63,7 @@ GEOIP,CN,DIRECT
 FINAL,,Proxy // notice there are two ","
 
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fyichengchen%2FclashX.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fyichengchen%2FclashX?ref=badge_large)
