@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0D318CDAC9464E01DAD1F92B /* Pods_ClashX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0358BF8F0CBD7FF9A7EA4E30 /* Pods_ClashX.framework */; };
 		4913C82321157D0200F6B87C /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4913C82221157D0200F6B87C /* Notification.swift */; };
-		492C4865210EC9E4004554A0 /* ProxyConfig in Resources */ = {isa = PBXBuildFile; fileRef = 492C4864210EC9E4004554A0 /* ProxyConfig */; };
 		492C4869210EE6B9004554A0 /* ApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492C4868210EE6B9004554A0 /* ApiRequest.swift */; };
 		492C4871210EF62E004554A0 /* ClashConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492C4870210EF62E004554A0 /* ClashConfig.swift */; };
 		4949D154213242F600EF85E6 /* Paths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4949D153213242F600EF85E6 /* Paths.swift */; };
@@ -46,6 +45,7 @@
 		49CF3B6320CED9CF001EBF94 /* check_proxy_helper.sh in Resources */ = {isa = PBXBuildFile; fileRef = 49CF3B6220CED934001EBF94 /* check_proxy_helper.sh */; };
 		49CF3B6520CEE06C001EBF94 /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CF3B6420CEE06C001EBF94 /* ConfigManager.swift */; };
 		49E07A8C20D501A000A088A3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49E07A8920D501A000A088A3 /* Main.storyboard */; };
+		663E4678213FCDCD006F11BB /* ProxyConfig in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4949D15B213260BD00EF85E6 /* ProxyConfig */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +63,13 @@
 			remoteGlobalIDString = 495A44BB20D2660A00888A0A;
 			remoteInfo = ClashXLaunchHelper;
 		};
+		663E4674213FCD50006F11BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49CF3B4B20CE5232001EBF94 /* ProxyConfig.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 36B6A3221E263590002B5B1D;
+			remoteInfo = ProxyConfig;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -76,12 +83,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		663E4677213FCDC4006F11BB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				663E4678213FCDCD006F11BB /* ProxyConfig in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0358BF8F0CBD7FF9A7EA4E30 /* Pods_ClashX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClashX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4913C82221157D0200F6B87C /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
-		492C4864210EC9E4004554A0 /* ProxyConfig */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = ProxyConfig; path = "../../../../Library/Developer/Xcode/DerivedData/ClashX-dojkemepirlxgtgjgkqxpjrbgopn/Build/Products/Debug/ProxyConfig"; sourceTree = "<group>"; };
 		492C4868210EE6B9004554A0 /* ApiRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiRequest.swift; sourceTree = "<group>"; };
 		492C4870210EF62E004554A0 /* ClashConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClashConfig.swift; sourceTree = "<group>"; };
 		4949D153213242F600EF85E6 /* Paths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paths.swift; sourceTree = "<group>"; };
@@ -306,7 +322,6 @@
 			children = (
 				4989F98D20D0AE990001E564 /* sampleConfig.ini */,
 				4989F98320D02D200001E564 /* Country.mmdb */,
-				492C4864210EC9E4004554A0 /* ProxyConfig */,
 				49722FE7211F28CC00650A41 /* initConfig.ini */,
 			);
 			path = "Support Files";
@@ -378,10 +393,12 @@
 				495A44CC20D266B000888A0A /* CopyFiles */,
 				A741C26F5755233F0D7CEC6F /* [CP] Embed Pods Frameworks */,
 				D3688B5A70792067918E9514 /* [CP] Copy Pods Resources */,
+				663E4677213FCDC4006F11BB /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				663E4675213FCD50006F11BB /* PBXTargetDependency */,
 				495A44CF20D2671F00888A0A /* PBXTargetDependency */,
 			);
 			name = ClashX;
@@ -475,7 +492,6 @@
 				4989F98420D02D200001E564 /* Country.mmdb in Resources */,
 				497F0DF320DE2FE50077AD41 /* Icon.icns in Resources */,
 				49722FF2211F338B00650A41 /* Info.plist in Resources */,
-				492C4865210EC9E4004554A0 /* ProxyConfig in Resources */,
 				4989F98E20D0AE990001E564 /* sampleConfig.ini in Resources */,
 				49CF3B6320CED9CF001EBF94 /* check_proxy_helper.sh in Resources */,
 			);
@@ -594,6 +610,11 @@
 			isa = PBXTargetDependency;
 			target = 495A44BB20D2660A00888A0A /* ClashXLaunchHelper */;
 			targetProxy = 495A44CE20D2671F00888A0A /* PBXContainerItemProxy */;
+		};
+		663E4675213FCD50006F11BB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ProxyConfig;
+			targetProxy = 663E4674213FCD50006F11BB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
