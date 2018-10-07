@@ -7,5 +7,6 @@ target 'ClashX' do
   pod 'RxSwift',    '~> 4.0'
   pod 'RxCocoa',    '~> 4.0'
   pod 'CocoaLumberjack/Swift'
+  pod 'WebViewJavascriptBridge', '~> 6.0'
 end
 

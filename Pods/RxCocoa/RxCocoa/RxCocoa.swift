@@ -132,7 +132,7 @@ func castOrFatalError<T>(_ value: AnyObject!, message: String) -> T {
 func castOrFatalError<T>(_ value: Any!) -> T {
     let maybeResult: T? = value as? T
     guard let result = maybeResult else {
-        rxFatalError("Failure converting from \(value) to \(T.self)")
+        rxFatalError("Failure converting from \(String(describing: value)) to \(T.self)")
     }
     
     return result

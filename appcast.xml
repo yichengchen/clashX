@@ -6,43 +6,112 @@
     <description>Most recent changes with links to updates.</description>
     <language>cn</language>
       <item>
-        <title>1.2</title>
+        <title>1.5.4</title>
         <description>
           <![CDATA[
-              <ul>
-              <li>1.2</li>
-              <li> Add outbound mode selection remembering. </li>
-              <li> Fix logging api disconnect.</li>
-              <li> Support socks5 proxy.</li>
-              <li> Fix issue with appstore and siri.</li>
-              <li> Fix issue with FireFox.</li>
-              <li> Watch config file changes.</li>
-              <li> Bugfixs </li>
-              </ul>
-              <ul>
+          <ul>
+              <li>1.5.4</li>
+              <li>Add Fallback group</li>
+              <li>Optimize speedtest panel</li>
+              <li>Show gray menu item when proxy not set.
+              <li>Fix issue with dark mode in 10.14</li>
+              <li>Sync code with clash</li>
+          </ul>
+          <ul>
+              <li>1.5.2</li>
+              <li>Fix stream writer to avoid connection closed when uploading (e.g. Telegram upload image)</li>
+              <li>Add SpeedTest.</li>
+          </ul>
+              
+          <ul>
+              <li>1.5</li>
+              <li>Add shadowsocks simple-obfs support</li>
+              <li>Add DOMAIN rule support</li>
+              <li>Improve HTTP proxy server handler</li>
+              <li>Fix rule ipv6 address parser</li>
+              <li>Support keyboard shortcut</li>
+          </ul>
+              
             <ul>
-              <li>1.1.2</li>
+              <li>1.4.1</li>
+              <li>Support Vmess with TLS.</li>
+              <li> Format:<br>vmess = vmess, 127.0.0.1, 1234, uuid, alterid (1 if you don't know), auto/aes-128-gcm/chacha20-poly1305/none, tls=true/false</li>
+            </ul>
+              
+            <ul>
+              <li>1.4.0</li>
+              <li>Support Vmess.</li>
+              <li>Try to fix config reload issue.</li>
+            </ul>
+            <ul>
+            <li>1.3.6</li>
+            <li>Fix infinity notification when config file is wrong.</li>
+            <li>Try to fix problem when telegram send images.</li>
+            <li>Ask to if to replace the config file or not when can not recognize config.</li>
+            </ul>
+            <ul>
+              <li> 1.3.5 </li>
+              <li>Sync the latest code with clash fix some connection issues with http proxy.</li>
+              <li>Fix select group error when having emoji in group name.</li>
+              <li>Backup Config file before override it.</li>
+            </ul>
+              
+          <ul>
+          <li> 1.3.4 </li>
+              <li>Fix Start at launch not work problem.</li>
+              <li>Better handling of TCP connections</;o>
+          </ul>
+          <ul>
+          <li> 1.3.3 </li>
+          <li> Revert <a href = "https://github.com/Dreamacro/clash/issues/3">#3</a> and use custom golang compiler to fix it. An issue had fired to Golang community.</li>
+          <li> Support custom status bar image. put your custom image(32*32) in ~/.config/clash/customImage.png </li>
+          <li> Support Qrcode and ss url import </li>
+          <li> Add option to support allow connection from lan </li>
+          </ul>
+
+            <ul>
+              <li> 1.3.1 </li>
+              <li> Fix Config file witness </li>
+              <li> Show what wrong in config while starting/reloading </li>
+              <li> Change open config to open config folder </li>
+              <li> Fixd permission check error when space in clashx directory </li>
+              <li> No allowing ':' in proxy name.(Fix  import from bunch json file form sspannel) </li>
+              <li> Watch config file changes </li>
+              <li> Bugfixs </li>
+            </ul>
+            <ul>
+              <li> 1.2 </li>
+              <li> Add outbound mode selection remembering </li>
+              <li> Fix logging api disconnect </li>
+              <li> Support socks5 proxy </li>
+              <li> Fix issue with appstore and siri </li>
+              <li> Fix issue with FireFox </li>
+              <li> Watch config file changes </li>
+              <li> Bugfixs </li>
+            </ul>
+            <ul>
+              <li> 1.1.2 </li>
               <li> Fixe auto remember proxy group not work </li>
-              <li> Show current proxy mode in top setting menut</li>
+              <li> Show current proxy mode in top setting menut </li>
               <li> Add logging </li>
             </ul>
             <ul>
-              <li>Version 1.1</li>
-              <li> Support icon in dark mode</li>
-              <li> Remember proxy group select</li>
+              <li> 1.1 </li>
+              <li> Support icon in dark mode </li>
+              <li> Remember proxy group select </li>
               <li> Fix traffic status update delay </li>
-              </ul>
+            </ul>
             <ul>
-            <li>Version 1.0</li>
-            <li>If you have installed previous version. you may need to delete config file in ~/.config/clash/config.ini and regenerate it</li>
-            <li> Support select group </li>
-            <li> Support urlTest group </li>
-            <li> Support outbound mode </li>
+              <li> 1.0 </li>
+              <li> If you have installed previous version. you may need to delete config file in ~/.config/clash/config.ini and regenerate it </li>
+              <li> Support select group </li>
+              <li> Support urlTest group </li>
+              <li> Support outbound mode </li>
             </ul>
           ]]>
         </description>
-        <pubDate>Sun, 12 Aug 2018 15:20:11 +0000</pubDate>
-        <enclosure url="https://github.com/yichengchen/clashX/releases/download/1.2/ClashX.dmg" sparkle:version="1.2" type="application/octet-stream"/>
+        <pubDate>Sun, 26 Aug 2018 15:20:11 +0000</pubDate>
+        <enclosure url="https://github.com/yichengchen/clashX/releases/download/1.5.4/ClashX.dmg" sparkle:version="1.5.4" type="application/octet-stream"/>
       </item>
   </channel>
 </rss>

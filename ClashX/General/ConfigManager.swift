@@ -13,8 +13,12 @@ import RxSwift
 class ConfigManager {
     
     static let shared = ConfigManager()
+    private let disposeBag = DisposeBag()
     var apiPort = "8080"
-    private init(){refreshApiPort()}
+    private init(){
+        refreshApiPort()
+        setupNetworkNotifier()
+    }
     
     var currentConfig:ClashConfig?{
         get {
@@ -55,7 +59,8 @@ class ConfigManager {
     
     static var selectedProxyMap:[String:String] {
         get{
-            return UserDefaults.standard.dictionary(forKey: "selectedProxyMap") as? [String:String] ?? ["Proxy":"ProxyAuto"]
+            let map = UserDefaults.standard.dictionary(forKey: "selectedProxyMap") as? [String:String] ?? ["Proxy":"ProxyAuto"]
+            return map.count == 0 ? ["Proxy":"ProxyAuto"] : map
         }
         set {
             UserDefaults.standard.set(newValue, forKey: "selectedProxyMap")
@@ -68,6 +73,15 @@ class ConfigManager {
         }
         set {
             UserDefaults.standard.set(newValue.rawValue, forKey: "selectOutBoundMode")
+        }
+    }
+    
+    static var allowConnectFromLan:Bool {
+        get{
+            return UserDefaults.standard.bool(forKey: "allowConnectFromLan")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "allowConnectFromLan")
         }
     }
     
@@ -91,8 +105,30 @@ class ConfigManager {
                 }
             }
         }
-        ConfigFileFactory.copySimpleConfigFile()
-        refreshApiPort()
+        if (ConfigFileFactory.copySimpleConfigFile()) {
+            refreshApiPort()
+        } else {
+            apiPort = "7892"
+        }
+    }
+    
+    func setupNetworkNotifier() {
+        NetworkChangeNotifier.start()
+        NotificationCenter
+            .default
+            .rx
+            .notification(kSystemNetworkStatusDidChange)
+            .subscribeOn(MainScheduler.instance)
+            .bind{ _ in
+            let (http,https,socks) = NetworkChangeNotifier.currentSystemProxySetting()
+            let proxySetted =
+                http == (self.currentConfig?.port ?? 0) &&
+                https == (self.currentConfig?.port ?? 0) &&
+                socks == (self.currentConfig?.socketPort ?? 0)
+            if (self.proxyPortAutoSet && !proxySetted) {
+                self.proxyPortAutoSet = proxySetted
+            }
+        }.disposed(by: disposeBag)
     }
     
 

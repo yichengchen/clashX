@@ -26,6 +26,7 @@ public class ConcurrentDispatchQueueScheduler: SchedulerType {
     /// Constructs new `ConcurrentDispatchQueueScheduler` that wraps `queue`.
     ///
     /// - parameter queue: Target dispatch queue.
+    /// - parameter leeway: The amount of time, in nanoseconds, that the system will defer the timer.
     public init(queue: DispatchQueue, leeway: DispatchTimeInterval = DispatchTimeInterval.nanoseconds(0)) {
         configuration = DispatchQueueConfiguration(queue: queue, leeway: leeway)
     }
@@ -33,6 +34,7 @@ public class ConcurrentDispatchQueueScheduler: SchedulerType {
     /// Convenience init for scheduler that wraps one of the global concurrent dispatch queues.
     ///
     /// - parameter qos: Target global dispatch queue, by quality of service class.
+    /// - parameter leeway: The amount of time, in nanoseconds, that the system will defer the timer.
     @available(iOS 8, OSX 10.10, *)
     public convenience init(qos: DispatchQoS, leeway: DispatchTimeInterval = DispatchTimeInterval.nanoseconds(0)) {
         self.init(queue: DispatchQueue(

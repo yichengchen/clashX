@@ -23,7 +23,7 @@ class ProxyMenuItemFactory {
                 var menu:NSMenuItem?
                 switch proxyGroup.value["type"].stringValue {
                 case "Selector": menu = self.generateSelectorMenuItem(json: dataDict, key: proxyGroup.key)
-                case "URLTest": menu = self.generateUrlTestMenuItem(proxyGroup: proxyGroup)
+                case "URLTest","Fallback": menu = self.generateUrlTestMenuItem(proxyGroup: proxyGroup)
                 default: continue
                 }
                 if (menu != nil) {menuItems.append(menu!)}
@@ -52,7 +52,14 @@ class ProxyMenuItemFactory {
                     continue
                 }
             }
-            let proxyItem = NSMenuItem(title: proxy.stringValue, action: #selector(ProxyMenuItemFactory.actionSelectProxy(sender:)), keyEquivalent: "")
+            var speedText = ""
+            let placeHolder = "\t"
+            if let speedInfo = SpeedDataRecorder.shared.speedDict[proxy.stringValue] {
+                speedText = speedInfo < Int.max ?"\(placeHolder)\(speedInfo) ms" : "\(placeHolder)fail"
+            }
+            
+            let proxyItem = ProxyMenuItem(title: proxy.stringValue + speedText, action: #selector(ProxyMenuItemFactory.actionSelectProxy(sender:)), keyEquivalent: "")
+            proxyItem.proxyName = proxy.stringValue
             proxyItem.target = ProxyMenuItemFactory.self
             let selected = proxy.stringValue == selectedName
             proxyItem.state = selected ? .on : .off
@@ -62,7 +69,7 @@ class ProxyMenuItemFactory {
         menu.submenu = submenu
         
         if (!hasSelected && submenu.items.count>0) {
-            self.actionSelectProxy(sender: submenu.items[0])
+            self.actionSelectProxy(sender: submenu.items[0] as! ProxyMenuItem)
         }
         return menu
     }
@@ -74,14 +81,15 @@ class ProxyMenuItemFactory {
         let submenu = NSMenu(title: proxyGroup.key)
 
         let nowMenuItem = NSMenuItem(title: "now:\(selectedName)", action: nil, keyEquivalent: "")
+        
         submenu.addItem(nowMenuItem)
         menu.submenu = submenu
         return menu
     }
     
-    @objc static func actionSelectProxy(sender:NSMenuItem){
+    @objc static func actionSelectProxy(sender:ProxyMenuItem){
         guard let proxyGroup = sender.menu?.title else {return}
-        let proxyName = sender.title
+        let proxyName = sender.proxyName
         
         ApiRequest.updateProxyGroup(group: proxyGroup, selectProxy: proxyName) { (success) in
             if (success) {
@@ -96,4 +104,8 @@ class ProxyMenuItemFactory {
     }
     
     
+}
+
+class ProxyMenuItem:NSMenuItem {
+    var proxyName:String = ""
 }

@@ -22,12 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 SU_EXPORT @interface SUAppcast : NSObject
 
 @property (copy, nullable) NSString *userAgentString;
-
-#if __has_feature(objc_generics)
 @property (copy, nullable) NSDictionary<NSString *, NSString *> *httpHeaders;
-#else
-@property (copy, nullable) NSDictionary *httpHeaders;
-#endif
 
 - (void)fetchAppcastFromURL:(NSURL *)url inBackground:(BOOL)bg completionBlock:(void (^)(NSError *_Nullable))err;
 - (SUAppcast *)copyWithoutDeltaUpdates;

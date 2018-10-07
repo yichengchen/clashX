@@ -24,22 +24,6 @@ import Foundation
 
 // MARK: - Error
 // swiftlint:disable line_length
-/// Error domain
-@available(*, deprecated, message: "ErrorDomain is deprecated. Use `SwiftyJSONError.errorDomain` instead.", renamed: "SwiftyJSONError.errorDomain")
-public let ErrorDomain: String = "SwiftyJSONErrorDomain"
-
-/// Error code
-@available(*, deprecated, message: "ErrorUnsupportedType is deprecated. Use `SwiftyJSONError.unsupportedType` instead.", renamed: "SwiftyJSONError.unsupportedType")
-public let ErrorUnsupportedType: Int = 999
-@available(*, deprecated, message: "ErrorIndexOutOfBounds is deprecated. Use `SwiftyJSONError.indexOutOfBounds` instead.", renamed: "SwiftyJSONError.indexOutOfBounds")
-public let ErrorIndexOutOfBounds: Int = 900
-@available(*, deprecated, message: "ErrorWrongType is deprecated. Use `SwiftyJSONError.wrongType` instead.", renamed: "SwiftyJSONError.wrongType")
-public let ErrorWrongType: Int = 901
-@available(*, deprecated, message: "ErrorNotExist is deprecated. Use `SwiftyJSONError.notExist` instead.", renamed: "SwiftyJSONError.notExist")
-public let ErrorNotExist: Int = 500
-@available(*, deprecated, message: "ErrorInvalidJSON is deprecated. Use `SwiftyJSONError.invalidJSON` instead.", renamed: "SwiftyJSONError.invalidJSON")
-public let ErrorInvalidJSON: Int = 490
-
 public enum SwiftyJSONError: Int, Swift.Error {
     case unsupportedType = 999
     case indexOutOfBounds = 900
@@ -145,19 +129,6 @@ public struct JSON {
 			self.init(NSNull())
 		}
 	}
-
-	/**
-	 Creates a JSON from JSON string
-	
-	 - parameter json: Normal json string like '{"a":"b"}'
-	
-	 - returns: The created JSON
-	 */
-    @available(*, deprecated, message: "Use instead `init(parseJSON: )`")
-    public static func parse(_ json: String) -> JSON {
-        return json.data(using: String.Encoding.utf8)
-            .flatMap { try? JSON(data: $0) } ?? JSON(NSNull())
-    }
 
 	/**
 	 Creates a JSON using the object.
@@ -589,14 +560,6 @@ extension JSON: Swift.ExpressibleByArrayLiteral {
 
     public init(arrayLiteral elements: Any...) {
         self.init(elements)
-    }
-}
-
-extension JSON: Swift.ExpressibleByNilLiteral {
-
-    @available(*, deprecated, message: "use JSON.null instead. Will be removed in future versions")
-    public init(nilLiteral: ()) {
-        self.init(NSNull() as Any)
     }
 }
 

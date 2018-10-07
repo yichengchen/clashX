@@ -192,7 +192,7 @@ extension PrimitiveSequenceType where TraitType == SingleTrait {
      - parameter onDispose: Action to invoke after subscription to source observable has been disposed for any reason. It can be either because sequence terminates for some reason or observer subscription being disposed.
      - returns: The source sequence with the side-effecting behavior applied.
      */
-    @available(*, deprecated, message: "Use do(onSuccess:onError:onSubscribe:onSubcribed:onDispose:) instead", renamed: "do(onSuccess:onError:onSubscribe:onSubcribed:onDispose:)")
+    @available(*, deprecated, renamed: "do(onSuccess:onError:onSubscribe:onSubscribed:onDispose:)")
     public func `do`(onNext: ((ElementType) throws -> Void)?,
                      onError: ((Swift.Error) throws -> Void)? = nil,
                      onSubscribe: (() -> ())? = nil,

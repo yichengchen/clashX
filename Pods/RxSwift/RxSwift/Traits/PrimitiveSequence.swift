@@ -148,13 +148,11 @@ extension PrimitiveSequence {
     }
 
     /**
-     Repeats the source observable sequence the specified number of times in case of an error or until it successfully terminates.
-
-     If you encounter an error and want it to retry once, then you must use `retry(2)`
+     If the initial subscription to the observable sequence emits an error event, try repeating it up to the specified number of attempts (inclusive of the initial attempt) or until is succeeds. For example, if you want to retry a sequence once upon failure, you should use retry(2) (once for the initial attempt, and once for the retry).
 
      - seealso: [retry operator on reactivex.io](http://reactivex.io/documentation/operators/retry.html)
 
-     - parameter maxAttemptCount: Maximum number of times to repeat the sequence.
+     - parameter maxAttemptCount: Maximum number of times to attempt the sequence subscription.
      - returns: An observable sequence producing the elements of the given sequence repeatedly until it terminates successfully.
      */
     public func retry(_ maxAttemptCount: Int)

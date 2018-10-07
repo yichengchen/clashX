@@ -21,7 +21,7 @@ public final class PublishRelay<Element>: ObservableType {
         _subject.onNext(event)
     }
     
-    /// Initializes variable with initial value.
+    /// Initializes with internal empty subject.
     public init() {
         _subject = PublishSubject()
     }

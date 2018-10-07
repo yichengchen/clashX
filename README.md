@@ -43,7 +43,7 @@ external-controller = 127.0.0.1:8080 // do not change this line when you are usi
 [Proxy]
 # name = ss, server, port, cipher, password
 # The types of cipher are consistent with go-shadowsocks2
-# support AEAD_AES_128_GCM AEAD_AES_192_GCM AEAD_AES_256_GCM AEAD_CHACHA20_POLY1305 AES-128-CTR AES-192-CTR AES-256-CTR AES-128-CFB AES-192-CFB AES-256-CFB CHACHA20-IETF XCHACHA20 RF4-MD5
+# support AEAD_AES_128_GCM AEAD_AES_192_GCM AEAD_AES_256_GCM AEAD_CHACHA20_POLY1305 AES-128-CTR AES-192-CTR AES-256-CTR AES-128-CFB AES-192-CFB AES-256-CFB CHACHA20-IETF XCHACHA20 RC4-MD5
 Proxy1 = ss, server1, port, AEAD_CHACHA20_POLY1305, password
 Proxy2 = ss, server2, port, AEAD_CHACHA20_POLY1305, password
 

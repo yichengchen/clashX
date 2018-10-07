@@ -28,5 +28,6 @@
 #import "SPUDownloaderProtocol.h"
 #import "SPUDownloaderSession.h"
 #import "SPUURLRequest.h"
+#import "SUCodeSigningVerifier.h"
 
 #endif

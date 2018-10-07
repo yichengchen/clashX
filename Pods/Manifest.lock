@@ -1,14 +1,15 @@
 PODS:
-  - Alamofire (4.7.2)
+  - Alamofire (4.7.3)
   - CocoaLumberjack/Default (3.4.2)
   - CocoaLumberjack/Swift (3.4.2):
     - CocoaLumberjack/Default
   - LetsMove (1.24)
-  - RxCocoa (4.2.0):
+  - RxCocoa (4.3.1):
     - RxSwift (~> 4.0)
-  - RxSwift (4.2.0)
-  - Sparkle (1.19.0)
-  - SwiftyJSON (4.1.0)
+  - RxSwift (4.3.1)
+  - Sparkle (1.20.0)
+  - SwiftyJSON (4.2.0)
+  - WebViewJavascriptBridge (6.0.3)
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
@@ -18,16 +19,18 @@ DEPENDENCIES:
   - RxSwift (~> 4.0)
   - Sparkle
   - SwiftyJSON (~> 4.0)
+  - WebViewJavascriptBridge (~> 6.0)
 
 SPEC CHECKSUMS:
-  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
+  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   CocoaLumberjack: db7cc9e464771f12054c22ff6947c5a58d43a0fd
   LetsMove: fefe56bc7bc7fb7d37049e28a14f297961229fc5
-  RxCocoa: 0b54909c902e1e581212a03e690bbd94032d8baa
-  RxSwift: 99e10317ddfcc7fbe01356aafd118fde4a0be104
-  Sparkle: 8486d2493599665e466b5076e72b28849776e32f
-  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
+  RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
+  RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
+  Sparkle: 48999e7ee032f05ca05e28451eadf4af8ede6b44
+  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
+  WebViewJavascriptBridge: 7f5bc4d3581e672e8f32bd0f812d54bc69bb8e29
 
-PODFILE CHECKSUM: 5688b80dca1be3b09d34bf937c676aec36197abe
+PODFILE CHECKSUM: d8f1577ac71a3f192151eb8aaec7605b97337ea7
 
 COCOAPODS: 1.4.0

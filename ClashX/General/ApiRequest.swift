@@ -8,7 +8,7 @@
 
 import Cocoa
 import Alamofire
-
+import SwiftyJSON
 
 
 class ApiRequest{
@@ -94,9 +94,21 @@ class ApiRequest{
         }
     }
     
-    static func requestConfigUpdate(callback:@escaping ((Bool)->())){
-        let success = updateAllConfig()
-        callback(success==0)
+    static func requestConfigUpdate(callback:@escaping ((String?)->())){
+        request(ConfigManager.apiUrl + "/configs", method: .put).responseJSON { (res) in
+            if res.response?.statusCode == 204 {
+                callback(nil)
+            } else {
+                if let errMSg = updateAllConfig() {
+                    let err = String(cString: errMSg)
+                    callback(err == "" ? nil : err)
+                } else {
+                    callback("unknown error")
+                }
+            }
+        }
+
+        
     }
     
     static func updateOutBoundMode(mode:ClashProxyMode, callback:@escaping ((Bool)->())) {
@@ -119,9 +131,44 @@ class ApiRequest{
         }
     }
     
+    static func updateAllowLan(allow:Bool,completeHandler:@escaping (()->())) {
+        request(ConfigManager.apiUrl + "/configs",
+                method: .put,
+                parameters: ["allow-lan":allow],
+                encoding: JSONEncoding.default).response{
+            _ in
+            completeHandler()
+        }
+    }
+    
     static func updateProxyGroup(group:String,selectProxy:String,callback:@escaping ((Bool)->())) {
-        request(ConfigManager.apiUrl + "/proxies/\(group)", method: .put, parameters: ["name":selectProxy], encoding: JSONEncoding.default).responseJSON { (response) in
+        let groupEncoded = group.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        request(ConfigManager.apiUrl + "/proxies/\(groupEncoded)", method: .put, parameters: ["name":selectProxy], encoding: JSONEncoding.default).responseJSON { (response) in
             callback(response.response?.statusCode == 204)
+        }
+    }
+    
+    static func getAllProxyList(callback:@escaping (([String])->())) {
+        requestProxyGroupList { (groups) in
+            let lists:[String] = groups["GLOBAL"]?["all"] as? [String] ?? []
+            var proxyList = [String]()
+            for proxy in lists {
+                if ["Shadowsocks","Vmess"] .contains(groups[proxy]?["type"] as? String ?? ""){
+                    proxyList.append(proxy)
+                }
+            }
+            callback(proxyList)
+        }
+    }
+    
+    static func getProxyDelay(proxyName:String,callback:@escaping ((Int)->())) {
+        let proxyNameEncoded = proxyName.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+
+        request(ConfigManager.apiUrl + "/proxies/\(proxyNameEncoded)/delay"
+            , method: .get
+            , parameters: ["timeout":5000,"url":"http://www.gstatic.com/generate_204"])
+            .responseJSON { (res) in let json = JSON(res.result.value ?? [])
+                callback(json["delay"].int ?? Int.max)
         }
     }
 }

@@ -32,6 +32,21 @@ extension NSUserNotificationCenter {
         self.post(title: "\(api) api connect error!", info: "Use reload config to try reconnect.")
     }
     
+    func postConfigErrorNotice(msg:String) {
+        self.post(title: "Config loading Fail!", info: msg)
+    }
+    
+    func postImportConfigFromUrlFailNotice(urlStr:String) {
+        self.post(title: "Import config from url fail", info: "Unrecongized Url:\(urlStr)")
+    }
+    
+    func postQRCodeNotFoundNotice() {
+        self.post(title: "QRCode import failed", info: "Not found")
+    }
+    
+    func postProxyRemarkDupNotice(name:String) {
+        self.post(title: "Proxy Remark duplicated", info: "Name:\(name)")
+    }
 }
 
 class UserNotificationCenterDelegate:NSObject,NSUserNotificationCenterDelegate {

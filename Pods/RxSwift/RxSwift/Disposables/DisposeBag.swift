@@ -32,14 +32,14 @@ public final class DisposeBag: DisposeBase {
     private var _lock = SpinLock()
     
     // state
-    private var _disposables = [Disposable]()
-    private var _isDisposed = false
+    fileprivate var _disposables = [Disposable]()
+    fileprivate var _isDisposed = false
     
     /// Constructs new empty dispose bag.
     public override init() {
         super.init()
     }
-    
+
     /// Adds `disposable` to be disposed when dispose bag is being deinited.
     ///
     /// - parameter disposable: Disposable to add.
@@ -80,5 +80,35 @@ public final class DisposeBag: DisposeBase {
     
     deinit {
         dispose()
+    }
+}
+
+extension DisposeBag {
+
+    /// Convenience init allows a list of disposables to be gathered for disposal.
+    public convenience init(disposing disposables: Disposable...) {
+        self.init()
+        _disposables += disposables
+    }
+
+    /// Convenience init allows an array of disposables to be gathered for disposal.
+    public convenience init(disposing disposables: [Disposable]) {
+        self.init()
+        _disposables += disposables
+    }
+
+    /// Convenience function allows a list of disposables to be gathered for disposal.
+    public func insert(_ disposables: Disposable...) {
+        insert(disposables)
+    }
+
+    /// Convenience function allows an array of disposables to be gathered for disposal.
+    public func insert(_ disposables: [Disposable]) {
+        _lock.lock(); defer { _lock.unlock() }
+        if _isDisposed {
+            disposables.forEach { $0.dispose() }
+        } else {
+            _disposables += disposables
+        }
     }
 }

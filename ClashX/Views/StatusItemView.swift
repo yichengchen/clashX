@@ -26,7 +26,7 @@ class StatusItemView: NSView {
     
     static func create(statusItem:NSStatusItem?,statusMenu:NSMenu)->StatusItemView{
         var topLevelObjects : NSArray?
-        if Bundle.main.loadNibNamed(NSNib.Name(rawValue: "StatusItemView"), owner: self, topLevelObjects: &topLevelObjects) {
+        if Bundle.main.loadNibNamed("StatusItemView", owner: self, topLevelObjects: &topLevelObjects) {
             let view = (topLevelObjects!.first(where: { $0 is NSView }) as? StatusItemView)!
             view.statusItem = statusItem
             view.menu = statusMenu
@@ -38,14 +38,34 @@ class StatusItemView: NSView {
     }
     
     func setupView() {
-        UserDefaults.standard
-            .rx.observe(String.self, "AppleInterfaceStyle").bind {
-            value in
-            let darkMode = (value ?? "Light") == "Dark"
-            let image = NSImage(named: NSImage.Name(rawValue: "menu_icon"))!.tint(color: darkMode ? NSColor.white : NSColor.black)
-            self.imageView.image = image
-            self.isDarkMode = darkMode
+        let darkModeObservable = UserDefaults.standard
+            .rx.observe(String.self, "AppleInterfaceStyle").map { $0 as AnyObject };
+        let proxySetObservable = ConfigManager.shared.proxyPortAutoSetObservable.map { $0 as AnyObject }
+        Observable
+            .of(darkModeObservable,proxySetObservable)
+            .merge()
+            .bind { [weak self] _ in
+                guard let self = self else {return}
+                let darkMode =
+                    UserDefaults.standard.string(forKey: "AppleInterfaceStyle") ?? "Light" == "Dark"
+                let enableProxy = ConfigManager.shared.proxyPortAutoSet;
+                
+                let customImagePath = (NSHomeDirectory() as NSString).appendingPathComponent("/.config/clash/menuImage.png")
+                
+                let selectedColor = darkMode ? NSColor.white : NSColor.black
+                let unselectedColor = NSColor.gray
+                let image = NSImage(contentsOfFile: customImagePath) ??
+                    NSImage(named: "menu_icon")!.tint(color: enableProxy ? selectedColor : unselectedColor)
+                
+                self.imageView.image = image
+                
+                self.uploadSpeedLabel.textColor = darkMode ? NSColor.white : NSColor.black
+                self.downloadSpeedLabel.textColor = self.uploadSpeedLabel.textColor
+                self.isDarkMode = darkMode
+                
         }.disposed(by: disposeBag)
+        
+
     }
     
     func updateSpeedLabel(up:Int,down:Int) {

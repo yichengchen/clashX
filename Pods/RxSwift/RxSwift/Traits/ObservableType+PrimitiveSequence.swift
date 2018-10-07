@@ -20,7 +20,7 @@ extension ObservableType {
     }
 
     /**
-     The `asMaybe` operator throws a ``RxError.moreThanOneElement`
+     The `asMaybe` operator throws a `RxError.moreThanOneElement`
      if the source Observable does not emit at most one element before successfully completing.
 
      - seealso: [single operator on reactivex.io](http://reactivex.io/documentation/operators/first.html)
