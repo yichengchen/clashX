@@ -1,4 +1,4 @@
-package main
+package main // import "github.com/yichengchen/clashX/ClashX"
 
 import (
 	"C"
