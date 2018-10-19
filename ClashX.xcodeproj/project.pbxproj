@@ -33,6 +33,8 @@
 		49722FF0211F338B00650A41 /* EventStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49722FEB211F338B00650A41 /* EventStream.swift */; };
 		49722FF1211F338B00650A41 /* Witness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49722FEC211F338B00650A41 /* Witness.swift */; };
 		49722FF2211F338B00650A41 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 49722FEE211F338B00650A41 /* Info.plist */; };
+		4975E121217A12210027708D /* ProxyMenuItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4975E120217A12210027708D /* ProxyMenuItemView.swift */; };
+		4975E123217A122E0027708D /* ProxyMenuItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4975E122217A122E0027708D /* ProxyMenuItemView.xib */; };
 		497F0DF320DE2FE50077AD41 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 497F0DF220DE2FE50077AD41 /* Icon.icns */; };
 		4981C88B216BAE4A008CC14A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4981C88D216BAE4A008CC14A /* Localizable.strings */; };
 		4981C890216BAF0C008CC14A /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4981C88F216BAF0C008CC14A /* String+Localized.swift */; };
@@ -132,6 +134,8 @@
 		49722FEC211F338B00650A41 /* Witness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Witness.swift; sourceTree = "<group>"; };
 		49722FED211F338B00650A41 /* Witness.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Witness.h; sourceTree = "<group>"; };
 		49722FEE211F338B00650A41 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4975E120217A12210027708D /* ProxyMenuItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProxyMenuItemView.swift; path = /Users/yicheng/Code/clashX/ClashX/Views/ProxyMenuItemView.swift; sourceTree = "<absolute>"; };
+		4975E122217A122E0027708D /* ProxyMenuItemView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProxyMenuItemView.xib; sourceTree = "<group>"; };
 		497F0DF220DE2FE50077AD41 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
 		4981C887216BAB8A008CC14A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		4981C888216BAB8A008CC14A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "../zh-Hans.lproj/Main.storyboard"; sourceTree = "<group>"; };
@@ -223,6 +227,8 @@
 			children = (
 				495340AF20DE5F7200B0D3FF /* StatusItemView.xib */,
 				495340B220DE68C300B0D3FF /* StatusItemView.swift */,
+				4975E120217A12210027708D /* ProxyMenuItemView.swift */,
+				4975E122217A122E0027708D /* ProxyMenuItemView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -516,6 +522,7 @@
 				4989F98420D02D200001E564 /* Country.mmdb in Resources */,
 				497F0DF320DE2FE50077AD41 /* Icon.icns in Resources */,
 				49722FF2211F338B00650A41 /* Info.plist in Resources */,
+				4975E123217A122E0027708D /* ProxyMenuItemView.xib in Resources */,
 				4989F98E20D0AE990001E564 /* sampleConfig.yml in Resources */,
 				49CF3B6320CED9CF001EBF94 /* check_proxy_helper.sh in Resources */,
 			);
@@ -618,6 +625,7 @@
 				49722FE4211ED56C00650A41 /* parseINI.swift in Sources */,
 				4966E9E6211824F300A391FB /* NSImage+extension.swift in Sources */,
 				4952C3CE2116EA2E004A4FA8 /* ProxyServerModel.swift in Sources */,
+				4975E121217A12210027708D /* ProxyMenuItemView.swift in Sources */,
 				49B1086A216A356D0064FFCE /* String+Extension.swift in Sources */,
 				4960A6DB2136529200B940C9 /* JSBridgeHandler.swift in Sources */,
 			);

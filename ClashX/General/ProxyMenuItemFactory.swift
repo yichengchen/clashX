@@ -61,10 +61,15 @@ class ProxyMenuItemFactory {
             let proxyItem = ProxyMenuItem(title: proxy.stringValue + speedText, action: #selector(ProxyMenuItemFactory.actionSelectProxy(sender:)), keyEquivalent: "")
             proxyItem.proxyName = proxy.stringValue
             proxyItem.target = ProxyMenuItemFactory.self
+            
+            let delay = SpeedDataRecorder.shared.speedDict[proxy.stringValue]
+            
             let selected = proxy.stringValue == selectedName
             proxyItem.state = selected ? .on : .off
+            proxyItem.view = ProxyMenuItemView.create(proxy: proxy.stringValue, delay: delay)
             if selected {hasSelected = true}
             submenu.addItem(proxyItem)
+            submenu.autoenablesItems = false
         }
         menu.submenu = submenu
         
