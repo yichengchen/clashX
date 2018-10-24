@@ -24,7 +24,7 @@ class JsBridgeHelper {
             responseCallback?(configStr)
         }
         
-        bridge.registerHandler("wirteConfigWithString") {(anydata, responseCallback) in
+        bridge.registerHandler("writeConfigWithString") {(anydata, responseCallback) in
             if let str = anydata as? String {
                 if (FileManager.default.fileExists(atPath: kConfigFilePath)) {
                     try? FileManager.default.removeItem(at: URL(fileURLWithPath: kConfigFilePath))
