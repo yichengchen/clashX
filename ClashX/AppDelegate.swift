@@ -95,9 +95,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     self.statusItem = NSStatusBar.system.statusItem(withLength: statusItemLength)
                 }
                 self.statusItem.length = statusItemLength
-                self.statusItem.view = self.statusItemView
                 self.statusItemView.showSpeedContainer(show: (show ?? true))
                 self.statusItemView.statusItem = self.statusItem
+                self.statusItemView.statusItem?.menu = self.statusMenu
+                self.statusItemView.updateStatusItemView()
             }.disposed(by: disposeBag)
         
         ConfigManager.shared
@@ -280,7 +281,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func resetStreamApi() {
         ApiRequest.shared.requestTrafficInfo(){ [weak self] up,down in
             guard let `self` = self else {return}
-            ((self.statusItem.view) as! StatusItemView).updateSpeedLabel(up: up, down: down)
+            self.statusItemView.updateSpeedLabel(up: up, down: down)
         }
         
         ApiRequest.shared.requestLog { (type, msg) in
