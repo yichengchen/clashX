@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -10,7 +10,7 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView focusRingType="none" id="c22-O7-iKe" customClass="ProxyMenuItemView" customModule="ClashX" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="214" height="18"/>
+            <rect key="frame" x="0.0" y="0.0" width="130" height="18"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField autoresizesSubviews="NO" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2xI-Y4-PnW">
@@ -25,18 +25,23 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aYx-Wc-u4X">
-                    <rect key="frame" x="171" y="0.0" width="37" height="18"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" enabled="NO" title="Label" id="90L-CS-E5U">
+                    <rect key="frame" x="120" y="0.0" width="4" height="18"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" enabled="NO" id="90L-CS-E5U">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G02-U6-KlU">
+                    <rect key="frame" x="2" y="1" width="17" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="menuOnStateTemplateName" id="KJc-uZ-b6K"/>
+                </imageView>
             </subviews>
             <constraints>
                 <constraint firstItem="2xI-Y4-PnW" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="2Ez-3J-oJy"/>
                 <constraint firstAttribute="bottom" secondItem="aYx-Wc-u4X" secondAttribute="bottom" id="4cP-1x-iyV"/>
-                <constraint firstItem="aYx-Wc-u4X" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="2xI-Y4-PnW" secondAttribute="trailing" constant="50" id="FaA-cy-GbD"/>
+                <constraint firstItem="aYx-Wc-u4X" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="2xI-Y4-PnW" secondAttribute="trailing" constant="15" id="CR1-j3-Rh9"/>
                 <constraint firstItem="aYx-Wc-u4X" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="M8d-FS-eL5"/>
                 <constraint firstItem="2xI-Y4-PnW" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="Uyg-Eh-dS6"/>
                 <constraint firstAttribute="bottom" secondItem="2xI-Y4-PnW" secondAttribute="bottom" id="oRZ-eb-hPi"/>
@@ -45,8 +50,12 @@
             <connections>
                 <outlet property="delayLabel" destination="aYx-Wc-u4X" id="4ie-3u-ePM"/>
                 <outlet property="proxyNameLabel" destination="2xI-Y4-PnW" id="h8l-xP-rbC"/>
+                <outlet property="selectedImageView" destination="G02-U6-KlU" id="JxC-gB-yiD"/>
             </connections>
-            <point key="canvasLocation" x="-96" y="202"/>
+            <point key="canvasLocation" x="-138" y="202"/>
         </customView>
     </objects>
+    <resources>
+        <image name="menuOnStateTemplateName" width="128" height="128"/>
+    </resources>
 </document>
