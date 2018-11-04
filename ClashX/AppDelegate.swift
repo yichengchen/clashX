@@ -40,28 +40,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let ssQueue = DispatchQueue(label: "com.w2fzu.ssqueue", attributes: .concurrent)
     var statusItemView:StatusItemView!
     
-    var isRunning = false
     func applicationDidFinishLaunching(_ notification: Notification) {
         signal(SIGPIPE, SIG_IGN)
         
         failLaunchProtect()
+        registCrashLogger()
         
         _ = ProxyConfigManager.install()
         ConfigFileFactory.upgardeIniIfNeed()
         ConfigFileFactory.copySampleConfigIfNeed()
         
         PFMoveToApplicationsFolderIfNecessary()
+        statusItem = NSStatusBar.system.statusItem(withLength:65)
+        statusItem.menu = statusMenu
 
-        statusItemView = StatusItemView.create(statusItem: nil,statusMenu: statusMenu)
-        statusItemView.onPopUpMenuAction = {
-            [weak self] in
-            guard let `self` = self else {return}
-            self.syncConfig()
-        }
+        statusItemView = StatusItemView.create(statusItem: statusItem)
+        statusMenu.delegate = self
+        
         setupData()
         setupDashboard()
         startProxy()
         updateLoggingLevel()
+        ConfigFileFactory.checkFinalRuleAndShowAlert()
     }
 
 
@@ -90,13 +90,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .bind {[unowned self] (show) in
                 self.showNetSpeedIndicatorMenuItem.state = (show ?? true) ? .on : .off
                 let statusItemLength:CGFloat = (show ?? true) ? 65 : 25
-                if (self.statusItem == nil) {
-                    self.statusItem = NSStatusBar.system.statusItem(withLength: statusItemLength)
-                }
                 self.statusItem.length = statusItemLength
-                self.statusItem.view = self.statusItemView
+                self.statusItemView.frame.size.width = statusItemLength
                 self.statusItemView.showSpeedContainer(show: (show ?? true))
-                self.statusItemView.statusItem = self.statusItem
+                self.statusItemView.updateStatusItemView()
             }.disposed(by: disposeBag)
         
         ConfigManager.shared
@@ -138,6 +135,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         }.disposed(by: disposeBag)
         
+        ConfigManager
+            .shared
+            .isRunningVariable
+            .asObservable()
+            .distinctUntilChanged()
+            .bind { [unowned self] _ in
+                self.updateProxyList()
+        }.disposed(by: disposeBag)
+        
         LaunchAtLogin.shared
             .isEnableVirable
             .asObservable()
@@ -152,6 +158,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if (!ClashWebViewContoller.enableDashBoard()) {
             statusMenu.removeItem(dashboardMenuItem)
         }
+    }
+    
+    func registCrashLogger() {
+        func exceptionHandler(exception : NSException) {
+            print(exception)
+            print(exception.callStackSymbols)
+            let str = exception.callStackSymbols.joined(separator: "\n")
+            Logger.log(msg: str, level: .error)
+        }
+        NSSetUncaughtExceptionHandler(exceptionHandler)
     }
     
     func failLaunchProtect(){
@@ -195,7 +211,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func updateProxyList() {
-        ProxyMenuItemFactory.menuItems { [unowned self] (menus) in
+        func updateProxyList(withMenus menus:[NSMenuItem]) {
             let startIndex = self.statusMenu.items.index(of: self.separatorLineTop)!+1
             let endIndex = self.statusMenu.items.index(of: self.sepatatorLineEndProxySelect)!
             var items = self.statusMenu.items
@@ -211,6 +227,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.statusMenu.insertItem(each, at: 0)
             }
         }
+        
+        if ConfigManager.shared.isRunning {
+            ProxyMenuItemFactory.menuItems { (menus) in
+                updateProxyList(withMenus: menus)
+            }
+            
+        } else {
+            updateProxyList(withMenus: [])
+        }
+        
+        
     }
     
     func updateLoggingLevel() {
@@ -221,16 +248,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     func startProxy() {
-        if self.isRunning {return}
-        
-        self.isRunning = true
         print("Trying start proxy")
         if let cstring = run() {
-//            self.isRunning = false
             let error = String(cString: cstring)
             if (error != "success") {
+                ConfigManager.shared.isRunning = false
                 NSUserNotificationCenter.default.postConfigErrorNotice(msg:error)
             } else {
+                ConfigManager.shared.isRunning = true
                 self.resetStreamApi()
                 self.selectOutBoundModeWithMenory()
                 self.selectAllowLanWithMenory()
@@ -251,7 +276,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func resetStreamApi() {
         ApiRequest.shared.requestTrafficInfo(){ [weak self] up,down in
             guard let `self` = self else {return}
-            ((self.statusItem.view) as! StatusItemView).updateSpeedLabel(up: up, down: down)
+            DispatchQueue.main.async {
+                self.statusItemView.updateSpeedLabel(up: up, down: down)
+            }
         }
         
         ApiRequest.shared.requestLog { (type, msg) in
@@ -317,6 +344,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.resetStreamApi()
                 self.selectProxyGroupWithMemory()
                 self.selectOutBoundModeWithMenory()
+                ConfigFileFactory.checkFinalRuleAndShowAlert()
                 NSUserNotificationCenter
                     .default
                     .post(title: "Reload Config Succeed", info: "succees")
@@ -392,7 +420,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSWorkspace.shared.openFile(Logger.shared.logFilePath())
 
     }
-   
+    
 }
 
+extension AppDelegate:NSMenuDelegate {
+    func menuWillOpen(_ menu: NSMenu) {
+        self.syncConfig()
+    }
+}
 

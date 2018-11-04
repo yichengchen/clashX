@@ -66,8 +66,9 @@ class ProxyConfigManager {
         let fileManage = FileManager.default
         let destMMDBPath = "\(kProxyConfigFolder)/Country.mmdb"
         if !fileManage.fileExists(atPath: destMMDBPath) {
-            let mmdbPath = Bundle.main.path(forResource: "Country", ofType: "mmdb")
-            try! fileManage.copyItem(at: URL(fileURLWithPath: mmdbPath!), to: URL(fileURLWithPath: destMMDBPath))
+            if let mmdbPath = Bundle.main.path(forResource: "Country", ofType: "mmdb") {
+                try? fileManage.copyItem(at: URL(fileURLWithPath: mmdbPath), to: URL(fileURLWithPath: destMMDBPath))
+            }
         }
     }
     

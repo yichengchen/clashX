@@ -25,17 +25,17 @@ class ProxyServerModel: NSObject, Codable {
     @objc dynamic var password:String = ""
     @objc dynamic var method:String = "RC4-MD5"
     @objc dynamic var remark:String = "NewProxy"
-    var simpleObfs:SimpleObfsType = .none {
+    var pluginStr:String? {
         didSet {
-            switch simpleObfs {
-            case .none:pluginStr = ""
-            case .http:pluginStr = ",obfs=http,obfs-host=bing.com"
-            case .tls:pluginStr =  ",obfs=tls,obfs-host=bing.com"
+            if pluginStr?.contains("http") ?? false {
+                simpleObfs = .http
+            } else if pluginStr?.contains("tls") ?? false {
+                simpleObfs = .tls
             }
         }
     }
+    var simpleObfs:SimpleObfsType = .none
     
-    var pluginStr = ""
     var proxyType:ProxyType = .shadowsocks
 
     
@@ -53,7 +53,8 @@ class ProxyServerModel: NSObject, Codable {
         "AEAD_AES_128_GCM",
         "AEAD_AES_192_GCM",
         "AEAD_AES_256_GCM",
-        "AEAD_CHACHA20_POLY1305"
+        "AEAD_CHACHA20_POLY1305",
+        "XCHACHA20-IEFT-POLY1305"
     ]
     
     
@@ -147,7 +148,7 @@ class ProxyServerModel: NSObject, Codable {
         var whitespace = NSCharacterSet.whitespacesAndNewlines
         whitespace.insert(":")
         remark = remark.components(separatedBy: whitespace).joined()
-        if remark == "" {remark = "NewProxy"}
+        if remark == "" {remark = serverHost}
         
         func validateIpAddress(_ ipToValidate: String) -> Bool {
             

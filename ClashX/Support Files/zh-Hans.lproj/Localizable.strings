@@ -12,3 +12,4 @@
 "Rule" = "规则";
 "Direct" = "直连";
 "Clash has changed config file format from .ini to .yml.\nClashX has automatically upgraded your config file.\nNote: current upgradation might cause your config file looks confusion. Check the config file example in github for better customize." = "Clash已经升级使用YML格式的配置文件。\nClashX已经将原有.ini配置文件进行转换。\n注意：当前阶段自动转换文件格式较为混乱，建议前往Clash Github查看最新config配置。";
+"No FINAL rule were found in clash configs,This might caused by incorrect upgradation during earily version of clashX or error setting of FINAL rule.Please check your config file.\n\nNO FINAL rule would cause traffic send to DIRECT which no match any rules." = "Clash规则配置文件中没有找到FINAL规则，这可能是由于之前版本ClashX的错误ini到yml的转换引起的，也可能因为对FINAL进行了错误的配置，如没有2个逗号,声明的出口不在Proxy或Proxy Group中等。请再次检查配置文件。\n\n缺失FINAL规则将导致无命中任何规则的流量使用DIRECT出口。";

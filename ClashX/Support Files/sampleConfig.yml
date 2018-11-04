@@ -13,8 +13,8 @@ port: 7890
 # SOCKS5 代理端口
 socks-port: 7891
 
-# Linux 和 macOS 的 redir 代理端口
-redir-port: 7892
+# Linux 和 macOS 的 redir 代理端口 (如需使用此功能，请取消注释)
+# redir-port: 7892
 
 # 允许局域网的连接（可用来共享代理）
 allow-lan: false
@@ -34,7 +34,7 @@ Proxy:
 # shadowsocks
 # 所支持的加密方式与 go-shadowsocks2 保持一致
 # 支持加密方式： AEAD_AES_128_GCM AEAD_AES_192_GCM AEAD_AES_256_GCM AEAD_CHACHA20_POLY1305 AES-128-CTR AES-192-CTR AES-256-CTR AES-128-CFB AES-192-CFB AES-256-CFB CHACHA20-IETF XCHACHA20
-# clash 在 v0.7.1 后支持 chacha20 和 rc4-md5 加密方式
+# clash 额外支持 chacha20 rc4-md5 xchacha20-ietf-poly1305 加密方式
 
 # - { name: "ss1", type: ss, server: server, port: 443, cipher: AEAD_CHACHA20_POLY1305, password: "password" }
 # - { name: "ss2", type: ss, server: server, port: 443, cipher: AEAD_CHACHA20_POLY1305, password: "password", obfs: tls, obfs-host: bing.com }
@@ -49,10 +49,10 @@ Proxy:
 
 Proxy Group:
 # url-test 可以自动选择与指定 URL 测速后，延迟最短的服务器
-# - { name: "auto", type: url-test, proxies: ["ss1", "ss2", "vmess1"], url: https://www.bing.com, interval: 300 }
+# - { name: "auto", type: url-test, proxies: ["ss1", "ss2", "vmess1"], url: "https://www.bing.com", interval: 300 }
 
 # fallback 可以尽量按照用户书写的服务器顺序，在确保服务器可用的情况下，自动选择服务器
-# - { name: "fallback-auto", type: fallback, proxies: ["ss1", "ss2", "vmess1"], url: https://www.bing.com, interval: 300 }
+# - { name: "fallback-auto", type: fallback, proxies: ["ss1", "ss2", "vmess1"], url: "https://www.bing.com", interval: 300 }
 
 # select 用来允许用户手动选择 代理服务器 或 服务器组
 # 您也可以使用 RESTful API 去切换服务器，这种方式推荐在 GUI 中使用

@@ -17,7 +17,7 @@ extension NSImage {
         color.set()
         
         let imageRect = NSRect(origin: NSZeroPoint, size: image.size)
-        imageRect.fill(using: .sourceAtop)
+        imageRect.fill(using: .sourceIn)
         
         image.unlockFocus()
         image.isTemplate = false

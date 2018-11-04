@@ -38,6 +38,7 @@
 		497F0DF320DE2FE50077AD41 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 497F0DF220DE2FE50077AD41 /* Icon.icns */; };
 		4981C88B216BAE4A008CC14A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4981C88D216BAE4A008CC14A /* Localizable.strings */; };
 		4981C890216BAF0C008CC14A /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4981C88F216BAF0C008CC14A /* String+Localized.swift */; };
+		49862FA0218418C600A1D5EC /* ClashRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49862F9F218418C600A1D5EC /* ClashRule.swift */; };
 		4989F98420D02D200001E564 /* Country.mmdb in Resources */ = {isa = PBXBuildFile; fileRef = 4989F98320D02D200001E564 /* Country.mmdb */; };
 		4989F98E20D0AE990001E564 /* sampleConfig.yml in Resources */ = {isa = PBXBuildFile; fileRef = 4989F98D20D0AE990001E564 /* sampleConfig.yml */; };
 		4997732520D251A60009B136 /* SWBApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4997732320D251A60009B136 /* SWBApplication.m */; };
@@ -142,6 +143,7 @@
 		4981C88C216BAE4A008CC14A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4981C88E216BAE4D008CC14A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		4981C88F216BAF0C008CC14A /* String+Localized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Localized.swift"; sourceTree = "<group>"; };
+		49862F9F218418C600A1D5EC /* ClashRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClashRule.swift; sourceTree = "<group>"; };
 		4989F98320D02D200001E564 /* Country.mmdb */ = {isa = PBXFileReference; lastKnownFileType = file; path = Country.mmdb; sourceTree = "<group>"; };
 		4989F98D20D0AE990001E564 /* sampleConfig.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sampleConfig.yml; sourceTree = "<group>"; };
 		4997732320D251A60009B136 /* SWBApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWBApplication.m; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 			children = (
 				492C4870210EF62E004554A0 /* ClashConfig.swift */,
 				4952C3CD2116EA2E004A4FA8 /* ProxyServerModel.swift */,
+				49862F9F218418C600A1D5EC /* ClashRule.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -628,6 +631,7 @@
 				4975E121217A12210027708D /* ProxyMenuItemView.swift in Sources */,
 				49B1086A216A356D0064FFCE /* String+Extension.swift in Sources */,
 				4960A6DB2136529200B940C9 /* JSBridgeHandler.swift in Sources */,
+				49862FA0218418C600A1D5EC /* ClashRule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,7 +13,7 @@ import RxSwift
 import RxCocoa
 
 class ClashWebViewContoller: NSViewController {
-    let webview: WKWebView = CustomWKWebView()
+    let webview: CustomWKWebView = CustomWKWebView()
     var bridge:WebViewJavascriptBridge?
     var disposeBag = DisposeBag()
     
@@ -27,6 +27,7 @@ class ClashWebViewContoller: NSViewController {
         super.viewDidLoad()
         webview.uiDelegate = self
         webview.navigationDelegate = self
+
         if #available(OSX 10.11, *) {
             webview.customUserAgent = "ClashX Runtime"
         } else {
@@ -34,8 +35,7 @@ class ClashWebViewContoller: NSViewController {
         }
         if NSAppKitVersion.current.rawValue > 1500 {
             webview.setValue(false, forKey: "drawsBackground")
-        }
-        else {
+        } else {
             webview.setValue(true, forKey: "drawsTransparentBackground")
         }
         view.addSubview(webview)
@@ -56,6 +56,7 @@ class ClashWebViewContoller: NSViewController {
         }
 
         bridge = JsBridgeHelper.initJSbridge(webview: webview, delegate: self)
+        registerExtenalJSBridgeFunction()
 
         webview.configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
 
@@ -71,19 +72,30 @@ class ClashWebViewContoller: NSViewController {
     
     override func viewWillAppear() {
         super.viewWillAppear()
-        self.view.window?.titleVisibility = .hidden
-        self.view.window?.titlebarAppearsTransparent = true
-        self.view.window?.styleMask.insert(.fullSizeContentView)
+        view.window?.titleVisibility = .hidden
+        view.window?.titlebarAppearsTransparent = true
+        view.window?.styleMask.insert(.fullSizeContentView)
 
         NSApp.activate(ignoringOtherApps: true)
-        self.view.window?.makeKeyAndOrderFront(self)
+        view.window?.makeKeyAndOrderFront(self)
         
-        self.view.window?.isOpaque = false
-        self.view.window?.backgroundColor = NSColor.clear
-        
-
+        view.window?.isOpaque = false
+        view.window?.backgroundColor = NSColor.clear
+        view.window?.styleMask.remove(.resizable)
+        view.window?.styleMask.remove(.miniaturizable)
     }
     
+}
+
+extension ClashWebViewContoller {
+    func registerExtenalJSBridgeFunction(){
+        self.bridge?.registerHandler("setDragAreaHeight") {(anydata, responseCallback) in
+            if let height = anydata as? CGFloat {
+                self.webview.dragableAreaHeight = height;
+            }
+            responseCallback?(nil)
+        }
+    }
 }
 
 extension ClashWebViewContoller:WKUIDelegate,WKNavigationDelegate {
@@ -111,18 +123,24 @@ extension ClashWebViewContoller:WKUIDelegate,WKNavigationDelegate {
         }
         return nil;
     }
+    
 }
 
 
 class CustomWKWebView: WKWebView {
+    
+    var dragableAreaHeight:CGFloat = 20;
+    let alwaysDragableLeftAreaWidth:CGFloat = 150;
+    
     override func mouseDown(with event: NSEvent) {
         super.mouseDown(with: event)
+        let x = event.locationInWindow.x
         let y = (self.window?.frame.size.height ?? 0) - event.locationInWindow.y
-        if y<20 {
+        
+        if x < alwaysDragableLeftAreaWidth || y < dragableAreaHeight {
             if #available(OSX 10.11, *) {
                 self.window?.performDrag(with: event)
             }
         }
-        
     }
 }

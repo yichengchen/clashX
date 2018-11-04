@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -10,7 +10,7 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="c22-O7-iKe" customClass="StatusItemView" customModule="ClashX" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="57" height="22"/>
+            <rect key="frame" x="0.0" y="0.0" width="65" height="22"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7SZ-08-T0A">
@@ -22,19 +22,19 @@
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="menu_icon" id="Hsk-Wu-8gc"/>
                 </imageView>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="x4I-nn-92U">
-                    <rect key="frame" x="23" y="0.0" width="31" height="22"/>
+                    <rect key="frame" x="39" y="0.0" width="23" height="22"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hlw-Vg-wLD">
-                            <rect key="frame" x="-2" y="1" width="35" height="11"/>
-                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="---KB/s" id="Cy5-d1-ldi">
+                            <rect key="frame" x="-2" y="1" width="27" height="11"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="-KB/s" id="Cy5-d1-ldi">
                                 <font key="font" metaFont="system" size="8"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="srp-1R-o7n">
-                            <rect key="frame" x="-2" y="10" width="35" height="11"/>
-                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="---KB/s" id="oCt-YG-3AI">
+                            <rect key="frame" x="-2" y="10" width="27" height="11"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="-KB/s" id="oCt-YG-3AI">
                                 <font key="font" metaFont="system" size="8"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -65,7 +65,7 @@
                 <outlet property="speedContainerView" destination="x4I-nn-92U" id="qlv-Jp-oB5"/>
                 <outlet property="uploadSpeedLabel" destination="srp-1R-o7n" id="s4y-hX-VbP"/>
             </connections>
-            <point key="canvasLocation" x="25.5" y="98"/>
+            <point key="canvasLocation" x="28.5" y="98"/>
         </customView>
     </objects>
     <resources>

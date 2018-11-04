@@ -56,7 +56,7 @@ func parseConfig(_ filename : String) -> Config? {
         } else if line.hasPrefix("//") || line.hasPrefix("#") || line.count < 1 {
             continue
         } else {
-            if (line.split(separator: ",").count > 2) {
+            if (line.split(separator: ",").count > 1) {
                 config[currentSectionName]?.array.append(line)
             }
         }

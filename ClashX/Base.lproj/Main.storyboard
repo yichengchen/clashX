@@ -37,8 +37,8 @@
                 </customObject>
                 <menu id="Afa-lD-EbR">
                     <items>
-                        <menuItem title="Proxy mode (Global)" id="jGT-1M-xJu">
-                            <menu key="submenu" title="Proxy mode (Global)" id="UU2-uE-YB4">
+                        <menuItem title="API Connect Error" id="jGT-1M-xJu">
+                            <menu key="submenu" title="API Connect Error" id="UU2-uE-YB4">
                                 <items>
                                     <menuItem title="Global" keyEquivalent="g" id="yiM-U4-MNg">
                                         <connections>
@@ -300,7 +300,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="delayCell" id="qZT-29-xCE">
-                                                            <rect key="frame" x="277.5" y="1" width="168" height="17"/>
+                                                            <rect key="frame" x="278" y="1" width="168" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="QCv-NJ-qh9">

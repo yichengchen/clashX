@@ -34,6 +34,18 @@ class ConfigManager {
     }
     var currentConfigVariable = Variable<ClashConfig?>(nil)
     
+    var isRunning:Bool{
+        get {
+            return isRunningVariable.value
+        }
+        
+        set {
+            isRunningVariable.value = newValue
+        }
+    }
+    
+    var isRunningVariable = Variable<Bool>(false)
+    
     var proxyPortAutoSet:Bool {
         get{
             return UserDefaults.standard.bool(forKey: "proxyPortAutoSet")

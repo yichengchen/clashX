@@ -32,7 +32,10 @@ class ApiRequest{
         parameters: Parameters? = nil,
         encoding: ParameterEncoding = URLEncoding.default)
         -> DataRequest {
-            
+            guard ConfigManager.shared.isRunning else {
+                return request("")
+            }
+
             return request(ConfigManager.apiUrl + url,
                 method: method,
                 parameters: parameters,
@@ -56,14 +59,15 @@ class ApiRequest{
     
     
     static func requestConfigUpdate(callback:@escaping ((String?)->())){
-        req("/configs", method: .put).responseJSON { (res) in
-            if let errMSg = updateAllConfig() {
-                let err = String(cString: errMSg)
-                callback(err == "" ? nil : err)
-            } else {
-                callback("unknown error")
-            }
+        if let errMSg = updateAllConfig() {
+            let err = String(cString: errMSg)
+            let success = (err == "")
+            ConfigManager.shared.isRunning = success
+            callback(success ? nil : err)
+        } else {
+            callback("unknown error")
         }
+        req("/configs", method: .put).responseJSON {_ in}
     }
     
     static func updateOutBoundMode(mode:ClashProxyMode, callback:@escaping ((Bool)->())) {
@@ -128,6 +132,14 @@ class ApiRequest{
             , parameters: ["timeout":5000,"url":"http://www.gstatic.com/generate_204"])
             .responseJSON { (res) in let json = JSON(res.result.value ?? [])
                 callback(json["delay"].int ?? Int.max)
+        }
+    }
+    
+    static func getRules(completeHandler:@escaping ([ClashRule])->()) {
+        req("/rules").responseData { res in
+            guard let data = res.result.value else {return}
+            let rule = ClashRuleResponse.fromData(data)
+            completeHandler(rule.rules)
         }
     }
 }

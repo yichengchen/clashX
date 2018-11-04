@@ -29,7 +29,7 @@ You can download from [release](https://github.com/yichengchen/clashX/releases) 
 You can use config generator in Status Bar Menu "Config" section.
 Config support most of surge rules.
 
-ClashX has upgrade to using .yml formate config file, Checking [Github for Clash](https://github.com/Dreamacro/clash) or[SS-Rule-Snippet for Clash] (https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/LAZY_RULES/clash.yml) for more detail
+ClashX has upgrade to using .yml formate config file, Checking [Github for Clash](https://github.com/Dreamacro/clash) or [SS-Rule-Snippet for Clash](https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/LAZY_RULES/clash.yml) for more detail
 
 Configuration file at $HOME/.config/clash/config.yml
 
