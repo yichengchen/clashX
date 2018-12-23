@@ -79,9 +79,8 @@ class RemoteConfigManager: NSObject {
                             }
                         }
                         
-                        let newConfigStringToWrite = try Yams.dump(object: originConfig)
                         try FileManager.default.removeItem(atPath: kDefaultConfigFilePath)
-                        try newConfigStringToWrite.write(toFile: kDefaultConfigFilePath, atomically: true, encoding: .utf8)
+                        try newConfigString.write(toFile: kDefaultConfigFilePath, atomically: true, encoding: .utf8)
                         NotificationCenter.default.post(Notification(name: kShouldUpDateConfig))
                         self.alert(with: "Success!")
                         replaceSuccess = true
