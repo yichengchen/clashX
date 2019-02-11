@@ -1,11 +1,17 @@
 language: objective-c
 osx_image: xcode10.1
+before_install:
+- chmod +x scripts/travis/add-key.sh
+- chmod +x scripts/travis/remove-key.sh
+- chmod +x scripts/travis/build.sh
+
 before_script:
 - "./scripts/travis/add-key.sh"
+script:
+- "./scripts/travis/build.sh"
 after_script:
 - "./scripts/travis/remove-key.sh"
-after_success:
-- "./scripts/travis/testflight.sh"
+
 env:
   global:
     secure: ptB8L6D0AG4mQ+BZx69A+5Qq32wcFNABU19l7vctfVqT9C3J1hpyWh3ySpPfW5QU+H9mqrnIhBM8cLqXstcUWp+CLsb4VmIee994JoW59Z9NGC+qc1mSMFygMvB4usD3qtkDHpIjaXwXqTNe6F6UP3kS4MgwwzZvGAtKX1GrdbKQZhkg6vC0thVCrmPI3370KhtMOwPOslUeA/3Zo1NPvMHdXgpsxE79RQtZZ0L0USwO/ItS54Scz0rryqLA25NOdjORxd3WV+fTpjMH1lNSf7gjCdcv6CoFQOFUWWxzgrUncDYA6Cmt2cQF780bHD4qu269tdZ7FzF2mvZ38gEi32h3Kc5gQWjehoHYnqlfiW74J8U2O9KkZUmE6PYd0qYGSAFMlvcHk8P7K8N/tZCwNdqgrI9+nSh4PXOOF1+ozUKJKNsUfq0Sd7prp73/sABGqy7DyIsJceA3XFxID65kugkpF7RqOWmwWx9ezrY1yz2K2RTuGxeF7yOl49cHoj5gDSOhziVVZg11+3IWPE77zyTiNWXOLnpW+18sh9O7dcWoicqiH4dkoq21k7zsrahqcew5uzEoI5U0O361dNJsVglTZLbdcXAwCg9Tkq7QdK+61Rt0P/rU217ObVAw8GXKU+uwt2S3JfE9dc9RxJVWg/LfZPCAJeZTtd2W/jfUMZ4=
