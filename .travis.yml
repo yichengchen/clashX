@@ -1,4 +1,5 @@
 language: objective-c
+osx_image: xcode10.1
 before_script:
 - "./scripts/travis/add-key.sh"
 after_script:
@@ -11,4 +12,3 @@ env:
 global:
 - APPNAME="ClashX"
 - 'DEVELOPER_NAME="Developer ID Application: Fuzhou West2Online Internet Inc. (MEWHFZ92DY)"'
-# - PROFILE_UUID=PROVISIONING_PROFILE_UUID
