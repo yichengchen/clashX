@@ -3,3 +3,5 @@ Carthage
 ClashX.a
 ClashX.h
 ClashX/Resources/dashboard
+ClashX.app
+*.dmg
