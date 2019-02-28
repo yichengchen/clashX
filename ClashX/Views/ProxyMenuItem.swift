@@ -14,6 +14,7 @@ class ProxyMenuItem:NSMenuItem {
     init(proxyName string: String, action selector: Selector?) {
         super.init(title: string, action: selector, keyEquivalent: "")
         
+	proxyName = string
         if let delay = SpeedDataRecorder.shared.getDelay(string) {
             let menuItemView = ProxyMenuItemView.create(proxy: string, delay: delay)
             menuItemView.onClick = { [weak self] in
