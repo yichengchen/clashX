@@ -1,8 +1,29 @@
 import Foundation
 import SystemConfiguration
 
-let version = "0.1.2"
+let version = "0.1.3"
 
+
+func getIgnoreList() -> [String] {
+    let configPath = "\(NSHomeDirectory())/.config/clash/proxyIgnoreList.plist"
+    if FileManager.default.fileExists(atPath: configPath) {
+        if let arr = NSArray(contentsOfFile: configPath) as? [String] {
+            return arr
+        }
+    }
+    let ignoreList = [
+        "192.168.0.0/16",
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "127.0.0.1",
+        "localhost",
+        "*.local",
+        "*.crashlytics.com"
+    ]
+    return ignoreList
+    
+
+}
 
 func getProxySetting(enable:Bool,port:Int,socksPort:Int) -> [String:AnyObject] {
     let ip = enable ? "127.0.0.1" : ""
@@ -25,22 +46,7 @@ func getProxySetting(enable:Bool,port:Int,socksPort:Int) -> [String:AnyObject] {
         proxySettings[kCFNetworkProxiesSOCKSPort as String] = nil
     }
     
-    var ignoreList = [
-        "192.168.0.0/16",
-        "10.0.0.0/8",
-        "172.16.0.0/12",
-        "127.0.0.1",
-        "localhost",
-        "*.local"
-    ]
-    
-    if !UserDefaults.standard.bool(forKey: "disableIgnoreCrashlytics") {
-        ignoreList.append("*.crashlytics.com")
-    }
-    
-    if let customArr = UserDefaults.standard.array(forKey: "customIgnoreList") as? [String] {
-        ignoreList.append(contentsOf: customArr)
-    }
+    let ignoreList = getIgnoreList()
     
     proxySettings[kCFNetworkProxiesExceptionsList as String] = ignoreList as AnyObject
     

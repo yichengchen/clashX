@@ -45,4 +45,16 @@ The default name of the configuration file is `config.yml`. You can use your cus
 
 Checking [Github for Clash](https://github.com/Dreamacro/clash) or [SS-Rule-Snippet for Clash](https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/LAZY_RULES/clash.yml) for more detail.
 
+## Advance Config
+### Change your status menu icon
+
+    Place your icon file in the ~/.config/clash/menuImage.png then restart ClashX
+
+### Change default system ignore list.
+
+    - Download sample plist in the [Here](https://baidu.com) and place in the ~/.config/clash/proxyIgnoreList.plist
+
+    - edit the proxyIgnoreList.plist to set up your own proxy ignore list
+
+
 
