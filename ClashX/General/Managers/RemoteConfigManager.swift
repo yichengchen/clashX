@@ -35,6 +35,15 @@ class RemoteConfigManager: NSObject {
         }
     }
     
+    static var autoUpdateEnable:Bool {
+        get {
+            return UserDefaults.standard.object(forKey: "kAutoUpdateEnable") as? Bool ?? true
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "kAutoUpdateEnable")
+        }
+    }
+    
     static func showUrlInputAlert() {
         let msg = NSAlert()
         msg.addButton(withTitle: "OK")
@@ -65,6 +74,7 @@ class RemoteConfigManager: NSObject {
     
     
     static func updateCheckAtLaunch() {
+        guard autoUpdateEnable else {return}
         let currentConfig = ConfigManager.selectConfigName
         
         if RemoteConfigManager.configUrl != nil, configFileName == currentConfig {

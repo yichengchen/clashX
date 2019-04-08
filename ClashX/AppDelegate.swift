@@ -39,6 +39,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var httpPortMenuItem: NSMenuItem!
     @IBOutlet weak var socksPortMenuItem: NSMenuItem!
     @IBOutlet weak var apiPortMenuItem: NSMenuItem!
+    @IBOutlet weak var remoteConfigAutoupdateMenuItem: NSMenuItem!
     
     var disposeBag = DisposeBag()
     var statusItemView:StatusItemView!
@@ -96,6 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // start watch config file change
         ConfigFileManager.shared.watchConfigFile(configName: ConfigManager.selectConfigName)
+        remoteConfigAutoupdateMenuItem.state = RemoteConfigManager.autoUpdateEnable ? .on : .off
         
         NotificationCenter.default.rx.notification(kShouldUpDateConfig).bind {
             [weak self] (note)  in
@@ -425,7 +427,10 @@ extension AppDelegate {
     }
     
 
-    
+    @IBAction func actionAutoUpdateRemoteConfig(_ sender: Any) {
+        RemoteConfigManager.autoUpdateEnable = !RemoteConfigManager.autoUpdateEnable
+        remoteConfigAutoupdateMenuItem.state = RemoteConfigManager.autoUpdateEnable ? .on : .off
+    }
     
     @IBAction func actionSetRemoteConfigUrl(_ sender: Any) {
         RemoteConfigManager.showUrlInputAlert()
