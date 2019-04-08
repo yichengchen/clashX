@@ -53,11 +53,11 @@ class ApiRequest{
     static func requestConfig(completeHandler:@escaping ((ClashConfig)->())){
         req("/configs").responseData{
             res in
-            guard let data = res.result.value else {return}
-            if let config = ClashConfig.fromData(data) {
+            if let data = res.result.value,
+                let config = ClashConfig.fromData(data) {
                 completeHandler(config)
             } else {
-                NSUserNotificationCenter.default.post(title: "Error", info: "Get clash config failed")
+                NSUserNotificationCenter.default.post(title: "Error", info: "Get clash config failed. Try Fix your config file then reload config or restart ClashX")
             }
         }
     }
