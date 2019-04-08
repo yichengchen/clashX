@@ -34,7 +34,7 @@ class MenuItemFactory {
                     menu.isEnabled=true
                 }
             }
-            completionHandler(menuItems)
+            completionHandler(menuItems.reversed())
         }
     }
     
