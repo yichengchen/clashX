@@ -16,8 +16,7 @@ A rule based proxy For Mac base on [Clash](https://github.com/Dreamacro/clash).
 - Surge like configuration
 - GeoIP rule support
 - Support Vmess/Shadowsocks/Socks5
-- Support for Netfilter TCP redirect
-
+- Support for Netfilter TCP redire
 
 ## Install
 
@@ -43,7 +42,7 @@ The default configuration directory is `$HOME/.config/clash`
 
 The default name of the configuration file is `config.yml`. You can use your custom config name and switch config in menu "Config" section.
 
-Checking [Github for Clash](https://github.com/Dreamacro/clash) or [SS-Rule-Snippet for Clash](https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/LAZY_RULES/clash.yml) for more detail.
+Checkout [Clash](https://github.com/Dreamacro/clash) or [SS-Rule-Snippet for Clash](https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/LAZY_RULES/clash.yml) for more detail.
 
 ## Advance Config
 ### Change your status menu icon
