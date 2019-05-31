@@ -16,7 +16,7 @@ A rule based proxy For Mac base on [Clash](https://github.com/Dreamacro/clash).
 - Surge like configuration
 - GeoIP rule support
 - Support Vmess/Shadowsocks/Socks5
-- Support for Netfilter TCP redire
+- Support for Netfilter TCP redirect
 
 ## Install
 
