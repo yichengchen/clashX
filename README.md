@@ -57,7 +57,7 @@ defaults write com.west2online.ClashX kDisableRestoreProxy -bool true
 
 ### Change default system ignore list.
 
-- Download sample plist in the [Here](https://baidu.com) and place in the
+- Download sample plist in the [Here](proxyIgnoreList.plist) and place in the
 
   ```
   ~/.config/clash/proxyIgnoreList.plist
