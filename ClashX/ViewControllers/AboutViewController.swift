@@ -12,16 +12,21 @@ class AboutViewController: NSViewController {
 
     @IBOutlet weak var versionLabel: NSTextField!
     @IBOutlet weak var buildTimeLabel: NSTextField!
+    @IBOutlet weak var coreVersionLabel: NSTextField!
     
-    var compileDate:Date
-    {
+    lazy var compileDate: Date = {
         let bundleName = Bundle.main.infoDictionary!["CFBundleName"] as? String ?? "Info.plist"
         if let infoPath = Bundle.main.path(forResource: bundleName, ofType: nil),
             let infoAttr = try? FileManager.default.attributesOfItem(atPath: infoPath),
-            let infoDate = infoAttr[FileAttributeKey.creationDate] as? Date
-        { return infoDate }
+            let infoDate = infoAttr[FileAttributeKey.creationDate] as? Date {
+            return infoDate
+        }
         return Date()
-    }
+    }()
+    
+    lazy var clashCoreVersion: String = {
+        return Bundle.main.infoDictionary?["coreVersion"] as? String ?? "unknown"
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,8 +35,9 @@ class AboutViewController: NSViewController {
         let version = AppVersionUtil.currentVersion
         let build = AppVersionUtil.currentBuild
         
-        self.versionLabel.stringValue = "Version: \(version) (\(build))"
-        self.buildTimeLabel.stringValue = self.compileDate.description;
+        versionLabel.stringValue = "Version: \(version) (\(build))"
+        coreVersionLabel.stringValue = clashCoreVersion
+        buildTimeLabel.stringValue = self.compileDate.description
 
     }
     
