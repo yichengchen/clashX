@@ -6,3 +6,4 @@ ClashX/Resources/dashboard
 ClashX.app
 *.dmg
 **/xcuserdata/
+.idea

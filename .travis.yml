@@ -20,9 +20,9 @@ install:
 - cd ..
 - brew update
 - echo `go version`
-- brew upgrade go || true
-- echo `go version`
-- CGO_CFLAGS=-mmacosx-version-min=10.10 CGO_LDFLAGS=-mmacosx-version-min=10.10 go build -buildmode=c-archive
+#- brew upgrade go || true
+#- echo `go version`
+- python3 ci_build_clash.py
 - cd $TRAVIS_BUILD_DIR
 
 script:
