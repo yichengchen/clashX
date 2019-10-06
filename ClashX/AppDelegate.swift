@@ -71,6 +71,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         PFMoveToApplicationsFolderIfNecessary()
         
+        // set system hosts override policy
+        if UserDefaults.standard.bool(forKey: "kEnableSystemHostsOverride") {
+            clashSetSystemDnsEnable(true.goObject())
+            ConfigFileManager.shared.watchHostsFile()
+        }
+        
         // start proxy
         setupData()
         updateConfig(showNotification: false)
@@ -78,7 +84,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // start watch config file change
         ConfigFileManager.shared.watchConfigFile(configName: ConfigManager.selectConfigName)
-        
+
         RemoteConfigManager.shared.autoUpdateCheck()
         
         NSAppleEventManager.shared()

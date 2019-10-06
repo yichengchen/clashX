@@ -2,10 +2,14 @@ package main // import "github.com/yichengchen/clashX/ClashX"
 import (
 	"C"
 	"encoding/json"
+	"fmt"
+	trie "github.com/Dreamacro/clash/component/domain-trie"
 	"github.com/Dreamacro/clash/config"
+	"github.com/Dreamacro/clash/dns"
 	"github.com/Dreamacro/clash/hub/executor"
 	"github.com/Dreamacro/clash/hub/route"
 	T "github.com/Dreamacro/clash/tunnel"
+	"github.com/lextoumbourou/goodhosts"
 	"github.com/phayes/freeport"
 	"io/ioutil"
 	"net"
@@ -13,6 +17,9 @@ import (
 	"strconv"
 	"strings"
 )
+
+var cfgHost *trie.Trie
+var systemDnsEnable = false
 
 func isAddrValid(addr string) bool{
 	if addr != "" {
@@ -97,7 +104,7 @@ func verifyClashConfig(content *C.char) *C.char {
 		return C.CString(err.Error())
 	}
 
-	cfg,err := executor.ParseWithPath(tmpFile.Name())
+	cfg, err := executor.ParseWithPath(tmpFile.Name())
 	if err != nil {
 		return C.CString(err.Error())
 	}
@@ -115,7 +122,8 @@ func run(developerMode bool) *C.char {
 	if err != nil {
 		return C.CString(err.Error())
 	}
-
+	cfgHost = cfg.Hosts
+	clashUpdateHosts()
 	portInfo := map[string]string{
 		"externalController": cfg.General.ExternalController,
 		"secret":   cfg.General.Secret,
@@ -140,7 +148,9 @@ func clashUpdateConfig(path *C.char) *C.char {
 	if err != nil {
 		return C.CString(err.Error())
 	}
+	cfgHost = cfg.Hosts
 	executor.ApplyConfig(cfg, false)
+	clashUpdateHosts()
 	return C.CString("success")
 }
 
@@ -168,5 +178,36 @@ func clashGetConfigs() *C.char {
 	return C.CString(string(jsonString))
 }
 
+//export clashSetSystemDnsEnable
+func clashSetSystemDnsEnable(enable bool) {
+	systemDnsEnable = enable
+}
+
+//export clashUpdateHosts
+func clashUpdateHosts() {
+	if !systemDnsEnable {
+		return
+	}
+	hosts,_:= goodhosts.NewHosts()
+	tree:=trie.New()
+	for _, line := range hosts.Lines {
+		if !line.IsComment() && strings.TrimSpace(line.Raw)  != "" && len(line.IP)>0 && len(line.Hosts)>0 {
+			fmt.Println(line.IP, line.Hosts)
+			for _, host := range line.Hosts {
+				ip := net.ParseIP(line.IP)
+				if ip != nil {
+					_ = tree.Insert(host, ip)
+				}
+			}
+		}
+	}
+	// insert hosts in config
+	if cfgHost != nil {
+		//cfgHost.Search()
+	}
+	dns.DefaultHosts = tree
+}
+
 func main() {
+
 }

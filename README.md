@@ -74,6 +74,15 @@ Checkout [Clash](https://github.com/Dreamacro/clash) or [SS-Rule-Snippet for Cla
   clash://install-config?url=http%3A%2F%2Fexample.com&name=example
   ```
 
+### Follow system hosts.
+
+- Enable system hosts override using follow command in terimal. The hosts setting would be ignored.
+
+  ```
+  defaults write com.west2online.ClashX kEnableSystemHostsOverride -bool true
+  ```
+
+
 ### Use own clash core.
 
 - Enable develop mode by command line

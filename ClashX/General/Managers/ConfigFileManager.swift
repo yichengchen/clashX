@@ -13,9 +13,20 @@ class ConfigFileManager {
     static let shared = ConfigFileManager()
     private var witness:Witness?
     private var pause = false
+    private var hostsFileWitness:Witness?
     
     func pauseForNextChange() {
         pause = true
+    }
+    
+    func watchHostsFile() {
+        let hostsPath = "/etc/hosts"
+        hostsFileWitness = Witness(paths: [hostsPath], flags: .FileEvents, latency: 0.3) {
+            events in
+            if let _ = events.first(where: {$0.flags.contains(.ItemModified)}){
+                clashUpdateHosts()
+            }
+        }
     }
     
     func watchConfigFile(configName:String) {
