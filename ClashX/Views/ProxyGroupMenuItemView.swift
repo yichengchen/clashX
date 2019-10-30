@@ -12,6 +12,9 @@ class ProxyGroupMenuItemView: NSView {
     let groupNameLabel: NSTextField
     let selectProxyLabel: NSTextField
     let arrowImageView = NSTextField(labelWithString: "▶")
+    var isMouseInsideView = false
+    var isMenuOpen = false
+    
     init(group: ClashProxyName, targetProxy: ClashProxyName) {
         groupNameLabel = NSTextField(labelWithString: group)
         selectProxyLabel = NSTextField(labelWithString: targetProxy)
@@ -54,6 +57,14 @@ class ProxyGroupMenuItemView: NSView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        if #available(macOS 10.15.1, *) {
+            enclosingMenuItem?.submenu?.delegate = self
+            addTrackingArea(NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited,.activeAlways], owner: self, userInfo: nil))
+        }
+    }
 
     override func viewDidMoveToSuperview() {
         super.viewDidMoveToSuperview()
@@ -63,11 +74,31 @@ class ProxyGroupMenuItemView: NSView {
             }
         }
     }
+    
+    override func mouseEntered(with event: NSEvent) {
+        if #available(macOS 10.15.1, *) {
+            isMouseInsideView = true
+            setNeedsDisplay(bounds)
+        }
+    }
+    
+    override func mouseExited(with event: NSEvent) {
+        if #available(macOS 10.15.1, *) {
+            isMouseInsideView = false
+            setNeedsDisplay(bounds)
+        }
+    }
 
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         guard let menu = enclosingMenuItem else { return }
-        if menu.isHighlighted {
+        let isHighlighted: Bool
+        if #available(macOS 10.15.1, *) {
+            isHighlighted = isMouseInsideView || isMenuOpen
+        } else {
+            isHighlighted = menu.isHighlighted
+        }
+        if isHighlighted {
             NSColor.selectedMenuItemColor.setFill()
             groupNameLabel.textColor = NSColor.white
             selectProxyLabel.textColor = NSColor.white
@@ -79,5 +110,25 @@ class ProxyGroupMenuItemView: NSView {
             selectProxyLabel.textColor = NSColor.secondaryLabelColor
         }
         dirtyRect.fill()
+    }
+}
+
+extension ProxyGroupMenuItemView: NSMenuDelegate {
+    func menuWillOpen(_ menu: NSMenu) {
+        if #available(macOS 10.15.1, *) {
+            isMenuOpen = true
+//            if !isMouseInsideView {
+                setNeedsDisplay(bounds)
+//            }
+        }
+    }
+
+    func menuDidClose(_ menu: NSMenu) {
+        if #available(macOS 10.15.1, *) {
+            isMenuOpen = false
+//            if !isMouseInsideView {
+                setNeedsDisplay(bounds)
+//            }
+        }
     }
 }

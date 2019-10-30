@@ -32,6 +32,7 @@ fileprivate class ProxyGroupSpeedTestMenuItemView: NSView {
     let testType: TestType
     let label: NSTextField
     let font = NSFont.menuFont(ofSize: 14)
+    var isMouseInsideView = false
 
     init(_ type: TestType) {
         testType = type
@@ -76,6 +77,29 @@ fileprivate class ProxyGroupSpeedTestMenuItemView: NSView {
     }
 
     private func retest() {}
+    
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        if #available(macOS 10.15.1, *) {
+            addTrackingArea(NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited,.activeAlways], owner: self, userInfo: nil))
+            addTrackingArea(NSTrackingArea(rect: bounds, options: [.mouseMoved,.activeAlways], owner: self, userInfo: nil))
+
+        }
+    }
+    
+    override func mouseEntered(with event: NSEvent) {
+        if #available(macOS 10.15.1, *) {
+            isMouseInsideView = true
+            setNeedsDisplay(bounds)
+        }
+    }
+    
+    override func mouseExited(with event: NSEvent) {
+        if #available(macOS 10.15.1, *) {
+            isMouseInsideView = false
+            setNeedsDisplay(bounds)
+        }
+    }
 
     override func mouseUp(with event: NSEvent) {
         switch testType {
@@ -87,7 +111,14 @@ fileprivate class ProxyGroupSpeedTestMenuItemView: NSView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         guard let menu = enclosingMenuItem else { return }
-        if menu.isHighlighted {
+        
+        let isHighlighted: Bool
+        if #available(macOS 10.15.1, *) {
+            isHighlighted = isMouseInsideView
+        } else {
+            isHighlighted = menu.isHighlighted
+        }
+        if isHighlighted {
             NSColor.selectedMenuItemColor.setFill()
             label.textColor = NSColor.white
         } else {
