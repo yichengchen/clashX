@@ -10,15 +10,27 @@ import Cocoa
 
 class ProxyGroupSpeedTestMenuItem: NSMenuItem {
     var proxyGroup: ClashProxy
+    var testType: TestType
+
     init(group: ClashProxy) {
         proxyGroup = group
-        super.init(title: NSLocalizedString("Benchmark", comment: ""), action: nil, keyEquivalent: "")
         switch group.type {
         case .urltest, .fallback:
-            view = ProxyGroupSpeedTestMenuItemView(.reTest)
+            testType = .reTest
         case .select:
-            view = ProxyGroupSpeedTestMenuItemView(.benchmark)
+            testType = .benchmark
         default:
+            testType = .unknown
+        }
+
+        super.init(title: NSLocalizedString("Benchmark", comment: ""), action: nil, keyEquivalent: "")
+
+        switch testType {
+        case .benchmark:
+            view = ProxyGroupSpeedTestMenuItemView(testType.title)
+        case .reTest:
+            title = testType.title
+        case .unknown:
             assertionFailure()
         }
     }
@@ -29,14 +41,12 @@ class ProxyGroupSpeedTestMenuItem: NSMenuItem {
 }
 
 fileprivate class ProxyGroupSpeedTestMenuItemView: NSView {
-    let testType: TestType
     let label: NSTextField
     let font = NSFont.menuFont(ofSize: 14)
     var isMouseInsideView = false
 
-    init(_ type: TestType) {
-        testType = type
-        label = NSTextField(labelWithString: type.title)
+    init(_ title: String) {
+        label = NSTextField(labelWithString: title)
         label.font = font
         label.sizeToFit()
         super.init(frame: NSRect(x: 0, y: 0, width: label.bounds.width + 40, height: 20))
@@ -100,12 +110,16 @@ fileprivate class ProxyGroupSpeedTestMenuItemView: NSView {
             setNeedsDisplay(bounds)
         }
     }
+    
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        if bounds.contains(point) {
+            return label
+        }
+        return super.hitTest(point)
+    }
 
     override func mouseUp(with event: NSEvent) {
-        switch testType {
-        case .benchmark: startBenchmark()
-        case .reTest: retest()
-        }
+        startBenchmark()
     }
 
     override func draw(_ dirtyRect: NSRect) {
@@ -133,15 +147,17 @@ fileprivate class ProxyGroupSpeedTestMenuItemView: NSView {
     }
 }
 
-extension ProxyGroupSpeedTestMenuItemView {
+extension ProxyGroupSpeedTestMenuItem {
     enum TestType {
         case benchmark
         case reTest
+        case unknown
 
         var title: String {
             switch self {
             case .benchmark: return NSLocalizedString("Benchmark", comment: "")
             case .reTest: return NSLocalizedString("ReTest", comment: "")
+            case .unknown: return ""
             }
         }
     }
