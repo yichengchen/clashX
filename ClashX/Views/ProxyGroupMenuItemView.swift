@@ -14,7 +14,7 @@ class ProxyGroupMenuItemView: NSView {
     let arrowImageView = NSTextField(labelWithString: "▶")
     var isMouseInsideView = false
     var isMenuOpen = false
-    
+
     init(group: ClashProxyName, targetProxy: ClashProxyName) {
         groupNameLabel = NSTextField(labelWithString: group)
         selectProxyLabel = NSTextField(labelWithString: targetProxy)
@@ -57,12 +57,13 @@ class ProxyGroupMenuItemView: NSView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func viewDidMoveToWindow() {
-        super.viewDidMoveToWindow()
+
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
         if #available(macOS 10.15.1, *) {
+            trackingAreas.forEach { removeTrackingArea($0) }
             enclosingMenuItem?.submenu?.delegate = self
-            addTrackingArea(NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited,.activeAlways], owner: self, userInfo: nil))
+            addTrackingArea(NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited, .activeAlways], owner: self, userInfo: nil))
         }
     }
 
@@ -74,14 +75,14 @@ class ProxyGroupMenuItemView: NSView {
             }
         }
     }
-    
+
     override func mouseEntered(with event: NSEvent) {
         if #available(macOS 10.15.1, *) {
             isMouseInsideView = true
             setNeedsDisplay(bounds)
         }
     }
-    
+
     override func mouseExited(with event: NSEvent) {
         if #available(macOS 10.15.1, *) {
             isMouseInsideView = false
@@ -117,18 +118,14 @@ extension ProxyGroupMenuItemView: NSMenuDelegate {
     func menuWillOpen(_ menu: NSMenu) {
         if #available(macOS 10.15.1, *) {
             isMenuOpen = true
-//            if !isMouseInsideView {
-                setNeedsDisplay(bounds)
-//            }
+            setNeedsDisplay(bounds)
         }
     }
 
     func menuDidClose(_ menu: NSMenu) {
         if #available(macOS 10.15.1, *) {
             isMenuOpen = false
-//            if !isMouseInsideView {
-                setNeedsDisplay(bounds)
-//            }
+            setNeedsDisplay(bounds)
         }
     }
 }

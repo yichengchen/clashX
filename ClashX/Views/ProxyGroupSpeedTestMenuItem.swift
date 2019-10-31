@@ -6,6 +6,7 @@
 //  Copyright © 2019 west2online. All rights reserved.
 //
 
+import Carbon
 import Cocoa
 
 class ProxyGroupSpeedTestMenuItem: NSMenuItem {
@@ -41,9 +42,10 @@ class ProxyGroupSpeedTestMenuItem: NSMenuItem {
 }
 
 fileprivate class ProxyGroupSpeedTestMenuItemView: NSView {
-    let label: NSTextField
-    let font = NSFont.menuFont(ofSize: 14)
-    var isMouseInsideView = false
+    private let label: NSTextField
+    private let font = NSFont.menuFont(ofSize: 14)
+    private var isMouseInsideView = false
+    private var eventHandler: EventHandlerRef?
 
     init(_ title: String) {
         label = NSTextField(labelWithString: title)
@@ -61,11 +63,12 @@ fileprivate class ProxyGroupSpeedTestMenuItemView: NSView {
     }
 
     private func startBenchmark() {
-        guard let group = (enclosingMenuItem as? ProxyGroupSpeedTestMenuItem)?.proxyGroup else { return }
-
+        guard let group = (enclosingMenuItem as? ProxyGroupSpeedTestMenuItem)?.proxyGroup
+        else { return }
         let testGroup = DispatchGroup()
         label.stringValue = NSLocalizedString("Testing", comment: "")
         enclosingMenuItem?.isEnabled = false
+        setNeedsDisplay(bounds)
         for proxyName in group.speedtestAble {
             testGroup.enter()
             ApiRequest.getProxyDelay(proxyName: proxyName) { delay in
@@ -83,34 +86,63 @@ fileprivate class ProxyGroupSpeedTestMenuItemView: NSView {
             self.label.stringValue = menu.title
             self.label.textColor = NSColor.labelColor
             menu.isEnabled = true
+            self.setNeedsDisplay(self.bounds)
         }
     }
 
-    private func retest() {}
-    
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+        if #available(macOS 10.15.1, *) {
+            trackingAreas.forEach { removeTrackingArea($0) }
+            addTrackingArea(NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited, .activeAlways], owner: self, userInfo: nil))
+            addTrackingArea(NSTrackingArea(rect: bounds, options: [.mouseMoved, .activeAlways], owner: self, userInfo: nil))
+        }
+    }
+
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         if #available(macOS 10.15.1, *) {
-            addTrackingArea(NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited,.activeAlways], owner: self, userInfo: nil))
-            addTrackingArea(NSTrackingArea(rect: bounds, options: [.mouseMoved,.activeAlways], owner: self, userInfo: nil))
-
+            setupCarbon()
         }
     }
-    
+
+//    https://gist.github.com/p0deje/da5e5cfda6be8cb87c2e7caad3a3df63
+//    https://stackoverflow.com/questions/53273191/custom-carbon-key-event-handler-fails-after-mouse-events
+    @available(macOS 10.15.1, *)
+    private func setupCarbon() {
+        if window != nil {
+            if let dispatcher = GetEventDispatcherTarget() {
+                let eventHandlerCallback: EventHandlerUPP = { eventHandlerCallRef, eventRef, userData in
+                    guard let userData = userData else { return 0 }
+                    let itemView: ProxyGroupSpeedTestMenuItemView = bridge(ptr: userData)
+                    itemView.startBenchmark()
+                    let response = CallNextEventHandler(eventHandlerCallRef, eventRef!)
+                    return response
+                }
+
+                let eventSpecs = [EventTypeSpec(eventClass: OSType(kEventClassMouse), eventKind: UInt32(kEventMouseUp))]
+
+                InstallEventHandler(dispatcher, eventHandlerCallback, 1, eventSpecs, bridge(obj: self), &eventHandler)
+            }
+        } else {
+            RemoveEventHandler(eventHandler)
+        }
+    }
+
     override func mouseEntered(with event: NSEvent) {
         if #available(macOS 10.15.1, *) {
             isMouseInsideView = true
             setNeedsDisplay(bounds)
         }
     }
-    
+
     override func mouseExited(with event: NSEvent) {
         if #available(macOS 10.15.1, *) {
             isMouseInsideView = false
             setNeedsDisplay(bounds)
         }
     }
-    
+
     override func hitTest(_ point: NSPoint) -> NSView? {
         if bounds.contains(point) {
             return label
@@ -119,20 +151,22 @@ fileprivate class ProxyGroupSpeedTestMenuItemView: NSView {
     }
 
     override func mouseUp(with event: NSEvent) {
-        startBenchmark()
+        if #available(macOS 10.15.1, *) {} else {
+            startBenchmark()
+        }
     }
 
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         guard let menu = enclosingMenuItem else { return }
-        
+
         let isHighlighted: Bool
         if #available(macOS 10.15.1, *) {
             isHighlighted = isMouseInsideView
         } else {
             isHighlighted = menu.isHighlighted
         }
-        if isHighlighted {
+        if isHighlighted && menu.isEnabled {
             NSColor.selectedMenuItemColor.setFill()
             label.textColor = NSColor.white
         } else {
