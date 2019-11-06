@@ -415,7 +415,7 @@ extension AppDelegate {
         let localhost = "127.0.0.1"
 
         let ip = isMenuOptionEnter ? NetworkChangeNotifier.getPrimaryIPAddress() ?? localhost : localhost
-        pasteboard.setString("export https_proxy=http://\(ip):\(port);export http_proxy=http://\(ip):\(port);export all_proxy=socks5://\(ip):\(socksport)", forType: .string)
+        pasteboard.setString("export https_proxy=http://\(ip):\(port) http_proxy=http://\(ip):\(port) all_proxy=socks5://\(ip):\(socksport)", forType: .string)
     }
 
     @IBAction func actionSpeedTest(_ sender: Any) {
