@@ -99,11 +99,11 @@ class ClashProxy: Codable {
     private enum CodingKeys: String, CodingKey {
         case type, all, history, now, name
     }
-    
+
     lazy var maxProxyNameLength: CGFloat = {
         let rect = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 20)
-        
-        let lengths = all?.compactMap({  string -> CGFloat in
+
+        let lengths = all?.compactMap({ string -> CGFloat in
             let rects = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 20)
             let attr = [NSAttributedString.Key.font: NSFont.menuBarFont(ofSize: 14)]
             return (string as NSString)
