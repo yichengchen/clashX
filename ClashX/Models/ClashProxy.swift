@@ -99,18 +99,19 @@ class ClashProxy: Codable {
     private enum CodingKeys: String, CodingKey {
         case type, all, history, now, name
     }
-
-    lazy var maxProxyName: String = {
-        return all?.max { $1.count > $0.count } ?? ""
-    }()
-
+    
     lazy var maxProxyNameLength: CGFloat = {
         let rect = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 20)
-        let attr = [NSAttributedString.Key.font: NSFont.menuBarFont(ofSize: 14)]
-        return (self.maxProxyName as NSString)
-            .boundingRect(with: rect,
-                          options: .usesLineFragmentOrigin,
-                          attributes: attr).width
+        
+        let lengths = all?.compactMap({  string -> CGFloat in
+            let rects = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 20)
+            let attr = [NSAttributedString.Key.font: NSFont.menuBarFont(ofSize: 14)]
+            return (string as NSString)
+                .boundingRect(with: rect,
+                              options: .usesLineFragmentOrigin,
+                              attributes: attr).width
+        })
+        return lengths?.max() ?? 0
     }()
 }
 
