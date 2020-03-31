@@ -355,7 +355,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if showNotification {
                     NSUserNotificationCenter.default
                         .post(title: NSLocalizedString("Reload Config Succeed", comment: ""),
-                              info: NSLocalizedString("Succees", comment: ""))
+                              info: NSLocalizedString("Success", comment: ""))
                 }
 
                 if let newConfigName = configName {
