@@ -22,7 +22,7 @@ A rule based proxy For Mac base on [Clash](https://github.com/Dreamacro/clash).
 
 You can download from [Release](https://github.com/yichengchen/clashX/releases) page
 
-Download ClashX Pro With enhanced mode and other advance feature at [AppCenter](https://install.appcenter.ms/users/clashx/apps/clashx/distribution_groups/public).
+Download ClashX Pro With enhanced mode and other advance feature at [AppCenter](https://install.appcenter.ms/users/clashx/apps/clashx-pro/distribution_groups/public).
 
 ## Build
 - Make sure have python3 and golang installed in your computer.
