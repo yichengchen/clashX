@@ -24,7 +24,7 @@ You can download from [Release](https://github.com/yichengchen/clashX/releases) 
 
 **Download ClashX Pro With enhanced mode and other advance feature at [AppCenter](https://install.appcenter.ms/users/clashx/apps/clashx-pro/distribution_groups/public) for free permanently.**
 
-**Download ClashX Pro Beta with Native Apple Silicon support at [AppCenter-CXP-AppleSilicon](install.appcenter.ms/users/clashx/apps/cxp-applesilicon/distribution_groups/public)**
+**Download ClashX Pro Beta with Native Apple Silicon support at [AppCenter-CXP-AppleSilicon](https://install.appcenter.ms/users/clashx/apps/cxp-applesilicon/distribution_groups/public)**
 
 ## Build
 - Make sure have python3 and golang installed in your computer.
