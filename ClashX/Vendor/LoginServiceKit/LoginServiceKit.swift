@@ -62,7 +62,7 @@ public extension LoginServiceKit {
         guard let sharedFileList = LSSharedFileListCreate(nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil) else { return false }
         let loginItemList = sharedFileList.takeRetainedValue()
         let url = URL(fileURLWithPath: path)
-        LSSharedFileListInsertItemURL(loginItemList, kLSSharedFileListItemBeforeFirst.takeRetainedValue(), nil, nil, url as CFURL, nil, nil)
+        LSSharedFileListInsertItemURL(loginItemList, nil, nil, nil, url as CFURL, nil, nil)
         return true
     }
 
