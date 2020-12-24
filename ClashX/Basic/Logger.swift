@@ -16,6 +16,10 @@ class Logger {
         #if DEBUG
             DDLog.add(DDOSLogger.sharedInstance)
         #endif
+        //default time zone is "UTC"
+        let dataFormatter = DateFormatter()
+        dataFormatter.setLocalizedDateFormatFromTemplate("YYYY/MM/dd HH:mm:ss:SSS")
+        fileLogger.logFormatter = DDLogFileFormatterDefault.init(dateFormatter: dataFormatter)
         fileLogger.rollingFrequency = TimeInterval(60 * 60 * 24) // 24 hours
         fileLogger.logFileManager.maximumNumberOfLogFiles = 3
         DDLog.add(fileLogger)
