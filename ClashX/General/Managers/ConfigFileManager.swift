@@ -19,8 +19,7 @@ class ConfigFileManager {
         pause = true
     }
 
-    func watchConfigFile(configName: String) {
-        let path = "\(kConfigFolderPath)\(configName).yaml"
+    func watchFile(path: String) {
         witness = Witness(paths: [path], flags: .FileEvents, latency: 0.3) {
             [weak self] events in
             guard let self = self else { return }
@@ -33,11 +32,16 @@ class ConfigFileManager {
                     NSUserNotificationCenter.default
                         .postConfigFileChangeDetectionNotice()
                     NotificationCenter.default
-                        .post(Notification(name: kConfigFileChange))
+                        .post(Notification(name: .configFileChange))
                     break
                 }
             }
         }
+    }
+
+    func stopWatchConfigFile() {
+        witness = nil
+        pause = false
     }
 
     @discardableResult

@@ -1,3 +1,18 @@
+lane :build do
+
+addKeyChain
+
+build_app(
+  workspace: "ClashX.xcworkspace",
+  scheme: "ClashX",
+  export_method: "developer-id",
+  skip_package_pkg: "true",
+  clean: "true"
+)
+
+sh(command: "rm -vfr ~/Library/Developer/Xcode/Archives/*")
+end
+
 lane :beta do
 current_version = get_version_number(
   target: "ClashX"
@@ -14,5 +29,46 @@ new_version = current_version + "." + new_build_identifier
 increment_build_number_in_plist(
     build_number: new_version,
     target: 'ClashX'
+)
+end
+
+lane :addKeyChain do
+  if is_ci?
+    
+    puts("create custom keychain")
+
+    delete_keychain(
+      name: "clashBuild"
+    ) if File.exist? File.expand_path("~/Library/Keychains/clashBuild-db")
+
+    create_keychain(
+      name: "clashBuild",
+      default_keychain: false,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false,
+      password: "password"
+    )
+    
+    import_certificate(
+      certificate_path: ".github/certs/dist.p12",
+      keychain_name:"clashBuild",
+      keychain_password:"password",
+      certificate_password:""
+    )
+  end
+end
+
+lane :setARM do
+update_xcodeproj(
+  xcodeproj: 'ClashX.xcodeproj',
+  options: {'ARCHS': 'arm64'} 
+)
+end
+
+lane :setUniversal do
+update_xcodeproj(
+  xcodeproj: 'ClashX.xcodeproj',
+  options: {'ARCHS': '$(ARCHS_STANDARD)'} 
 )
 end

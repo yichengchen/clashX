@@ -9,10 +9,7 @@
 #import "ProxySettingTool.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <AppKit/AppKit.h>
-
-#include <unistd.h>
-#include <sys/types.h>
-#include <pwd.h>
+#import "CommonUtils.h"
 
 @interface ProxySettingTool()
 @property (nonatomic, assign) AuthorizationRef authRef;
@@ -21,27 +18,40 @@
 
 @implementation ProxySettingTool
 
+- (instancetype)init {
+    if (self = [super init]) {
+        [self localAuth];
+    }
+    return self;
+}
+
 // MARK: - Public
 
-- (void)enableProxyWithport:(int)port socksPort:(int)socksPort {
+- (void)enableProxyWithport:(int)port socksPort:(int)socksPort
+                     pacUrl:(NSString *)pacUrl
+            filterInterface:(BOOL)filterInterface  {
+
     [self applySCNetworkSettingWithRef:^(SCPreferencesRef ref) {
-        [ProxySettingTool getDiviceListWithPrefRef:ref devices:^(NSString *key, NSDictionary *dict) {
-            [self enableProxySettings:ref interface:key port:port socksPort:socksPort];
+        [ProxySettingTool getDiviceListWithPrefRef:ref filterInterface:filterInterface devices:^(NSString *key, NSDictionary *dict) {
+            [self enableProxySettings:ref interface:key port:port socksPort:socksPort pac:pacUrl];
         }];
     }];
 }
 
-- (void)disableProxy {
+- (void)disableProxyWithfilterInterface:(BOOL)filterInterface {
     [self applySCNetworkSettingWithRef:^(SCPreferencesRef ref) {
-        [ProxySettingTool getDiviceListWithPrefRef:ref devices:^(NSString *key, NSDictionary *dict) {
+        [ProxySettingTool getDiviceListWithPrefRef:ref filterInterface:filterInterface devices:^(NSString *key, NSDictionary *dict) {
             [self disableProxySetting:ref interface:key];
         }];
     }];
 }
 
-- (void)restoreProxySettint:(NSDictionary *)savedInfo currentPort:(int)port currentSocksPort:(int)socksPort {
+- (void)restoreProxySettint:(NSDictionary *)savedInfo
+                currentPort:(int)port
+           currentSocksPort:(int)socksPort
+            filterInterface:(BOOL)filterInterface{
     [self applySCNetworkSettingWithRef:^(SCPreferencesRef ref) {
-        [ProxySettingTool getDiviceListWithPrefRef:ref devices:^(NSString *key, NSDictionary *dict) {
+        [ProxySettingTool getDiviceListWithPrefRef:ref filterInterface:filterInterface devices:^(NSString *key, NSDictionary *dict) {
             NSDictionary *proxySetting = savedInfo[key];
             if (![proxySetting isKindOfClass:[NSDictionary class]]) {
                 proxySetting = nil;
@@ -84,7 +94,7 @@
 + (NSMutableDictionary<NSString *,NSDictionary *> *)currentProxySettings {
     __block NSMutableDictionary<NSString *,NSDictionary *> *info = [NSMutableDictionary dictionary];
     SCPreferencesRef ref = SCPreferencesCreate(nil, CFSTR("ClashX"), nil);
-    [ProxySettingTool getDiviceListWithPrefRef:ref devices:^(NSString *key, NSDictionary *dev) {
+    [ProxySettingTool getDiviceListWithPrefRef:ref filterInterface:YES devices:^(NSString *key, NSDictionary *dev) {
         NSDictionary *proxySettings = dev[(__bridge NSString *)kSCEntNetProxies];
         info[key] = [proxySettings copy];
     }];
@@ -101,23 +111,16 @@
 
 
 + (NSString *)getUserHomePath {
-    SCDynamicStoreRef store = SCDynamicStoreCreate(NULL, CFSTR("com.west2online.ClashX.ProxyConfigHelper"), NULL, NULL);
-    CFStringRef CopyCurrentConsoleUsername(SCDynamicStoreRef store);
-    CFStringRef result;
-    uid_t uid;
-    result = SCDynamicStoreCopyConsoleUser(store, &uid, NULL);
-    if ((result != NULL) && CFEqual(result, CFSTR("loginwindow"))) {
-        CFRelease(result);
-        result = NULL;
-        CFRelease(store);
+    NSString *userName = [CommonUtils runCommand:@"/usr/bin/stat" args:@[@"-f",@"%Su",@"/dev/console"]];
+    userName = [userName stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    if (!userName) {
         return nil;
     }
-    CFRelease(result);
-    result = NULL;
-    CFRelease(store);
-    char *dir = getpwuid(uid)->pw_dir;
-    NSString *path = [NSString stringWithUTF8String:dir];
-    return path;
+    NSString *path = [NSString stringWithFormat:@"/Users/%@", userName];
+    if([NSFileManager.defaultManager fileExistsAtPath:path]) {
+        return path;
+    }
+    return nil;
 }
 
 
@@ -127,7 +130,7 @@
         NSString *configPath = [homePath stringByAppendingString:@"/.config/clash/proxyIgnoreList.plist"];
         if ([NSFileManager.defaultManager fileExistsAtPath:configPath]) {
             NSArray *arr = [[NSArray alloc] initWithContentsOfFile:configPath];
-            if (arr != nil && arr.count > 0 && [arr containsObject:@"127.0.0.1"]) {
+            if (arr != nil && arr.count > 0) {
                 return arr;
             }
         }
@@ -139,15 +142,19 @@
         @"127.0.0.1",
         @"localhost",
         @"*.local",
+        @"timestamp.apple.com"
     ];
     return ignoreList;
 }
 
-- (NSDictionary *)getProxySetting:(BOOL)enable port:(int) port socksPort: (int)socksPort {
+- (NSDictionary *)getProxySetting:(BOOL)enable port:(int) port
+                        socksPort: (int)socksPort pac:(NSString *)pac {
+    
     NSMutableDictionary *proxySettings = [NSMutableDictionary dictionary];
     
     NSString *ip = enable ? @"127.0.0.1" : @"";
     NSInteger enableInt = enable ? 1 : 0;
+    NSInteger enablePac = [pac length] > 0;
     
     proxySettings[(__bridge NSString *)kCFNetworkProxiesHTTPProxy] = ip;
     proxySettings[(__bridge NSString *)kCFNetworkProxiesHTTPEnable] = @(enableInt);
@@ -167,8 +174,18 @@
         proxySettings[(__bridge NSString *)kCFNetworkProxiesSOCKSPort] = nil;
     }
     
+    proxySettings[(__bridge NSString *)kCFNetworkProxiesProxyAutoConfigEnable] = @(enablePac);
+    if (enablePac) {
+        proxySettings[(__bridge NSString *)kCFNetworkProxiesProxyAutoConfigURLString] = pac;
+    } else {
+        proxySettings[(__bridge NSString *)kCFNetworkProxiesProxyAutoConfigURLString] = nil;
+    }
     
-    proxySettings[(__bridge NSString *)kCFNetworkProxiesExceptionsList] = [self getIgnoreList];
+    if (enable) {
+        proxySettings[(__bridge NSString *)kCFNetworkProxiesExceptionsList] = [self getIgnoreList];
+    } else {
+        proxySettings[(__bridge NSString *)kCFNetworkProxiesExceptionsList] = @[];
+    }
     
     return proxySettings;
 }
@@ -183,16 +200,17 @@
 - (void)enableProxySettings:(SCPreferencesRef)prefs
                   interface:(NSString *)interfaceKey
                        port:(int) port
-                  socksPort:(int) socksPort {
+                  socksPort:(int) socksPort
+                        pac:(NSString *)pac {
     
-    NSDictionary *proxySettings = [self getProxySetting:YES port:port socksPort:socksPort];
+    NSDictionary *proxySettings = [self getProxySetting:YES port:port socksPort:socksPort pac:pac];
     [self setProxyConfig:prefs interface:interfaceKey proxySetting:proxySettings];
     
 }
 
 - (void)disableProxySetting:(SCPreferencesRef)prefs
                   interface:(NSString *)interfaceKey {
-    NSDictionary *proxySettings = [self getProxySetting:NO port:0 socksPort:0];
+    NSDictionary *proxySettings = [self getProxySetting:NO port:0 socksPort:0 pac:nil];
     [self setProxyConfig:prefs interface:interfaceKey proxySetting:proxySettings];
 }
 
@@ -205,14 +223,17 @@
                               (__bridge CFDictionaryRef)proxySettings);
 }
 
-+ (void)getDiviceListWithPrefRef:(SCPreferencesRef)ref devices:(void(^)(NSString *, NSDictionary *))callback {
++ (void)getDiviceListWithPrefRef:(SCPreferencesRef)ref
+                 filterInterface:(BOOL)filterInterface
+                         devices:(void(^)(NSString *, NSDictionary *))callback {
     NSDictionary *sets = (__bridge NSDictionary *)SCPreferencesGetValue(ref, kSCPrefNetworkServices);
     for (NSString *key in [sets allKeys]) {
         NSMutableDictionary *dict = [sets objectForKey:key];
         NSString *hardware = [dict valueForKeyPath:@"Interface.Hardware"];
-        if ([hardware isEqualToString:@"AirPort"]
+        if (!filterInterface || [hardware isEqualToString:@"AirPort"]
             || [hardware isEqualToString:@"Wi-Fi"]
-            || [hardware isEqualToString:@"Ethernet"]) {
+            || [hardware isEqualToString:@"Ethernet"]
+            ) {
             callback(key,dict);
         }
     }
@@ -239,38 +260,21 @@
     return authFlags;
 }
 
-- (NSString *)setupAuth:(NSData *)authData {
-    if (authData.length == 0 || authData.length != kAuthorizationExternalFormLength) {
-        return @"PrivilegedTaskRunnerHelper: Authorization data is malformed";
-    }
-    AuthorizationRef authRef;
+- (void)localAuth {
+    OSStatus myStatus;
+    AuthorizationFlags myFlags = [self authFlags];
+    myStatus = AuthorizationCreate(NULL, kAuthorizationEmptyEnvironment, myFlags, &_authRef);
     
-    OSStatus status = AuthorizationCreateFromExternalForm([authData bytes],&authRef);
-    if (status != errAuthorizationSuccess) {
-        return @"AuthorizationCreateFromExternalForm fail";
-    }
-    
-    NSString *authName = @"com.west2online.ClashX.ProxyConfigHelper.config";
-    AuthorizationItem authItem = {authName.UTF8String, 0, NULL, 0};
-    AuthorizationRights authRight = {1, &authItem};
-    
-    AuthorizationFlags authFlags = [self authFlags];
-    
-    status = AuthorizationCopyRights(authRef, &authRight, nil, authFlags, nil);
-    if (status != errAuthorizationSuccess) {
-        AuthorizationFree(authRef, authFlags);
-        return @"AuthorizationCopyRights fail";
+    if (myStatus != errAuthorizationSuccess)
+    {
+        return;
     }
     
-    OSStatus authErr = AuthorizationCreate(nil, kAuthorizationEmptyEnvironment, authFlags, &authRef);
-    
-    if (authErr != noErr) {
-        AuthorizationFree(authRef, authFlags);
-        return @"AuthorizationCreate fail";
-    }
-    self.authRef = authRef;
-    return nil;
+    AuthorizationItem myItems = {kAuthorizationRightExecute, 0, NULL, 0};
+    AuthorizationRights myRights = {1, &myItems};
+    myStatus = AuthorizationCopyRights (self.authRef, &myRights, NULL, myFlags, NULL );
 }
+
 
 - (void)freeAuth {
     if (self.authRef) {

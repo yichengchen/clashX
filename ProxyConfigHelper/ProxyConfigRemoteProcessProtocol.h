@@ -19,15 +19,17 @@ typedef void(^dictReplyBlock)(NSDictionary *);
 
 - (void)enableProxyWithPort:(int)port
           socksPort:(int)socksPort
-           authData:(NSData *)authData
+            pac:(NSString *)pac
+            filterInterface:(BOOL)filterInterface
             error:(stringReplyBlock)reply;
 
-- (void)disableProxyWithAuthData:(NSData *)authData error:(stringReplyBlock)reply;
+- (void)disableProxyWithFilterInterface:(BOOL)filterInterface
+                                  reply:(stringReplyBlock)reply;
 
 - (void)restoreProxyWithCurrentPort:(int)port
                           socksPort:(int)socksPort
                                info:(NSDictionary *)dict
-                           authData:(NSData *)authData
+                    filterInterface:(BOOL)filterInterface
                               error:(stringReplyBlock)reply;
 
 - (void)getCurrentProxySetting:(dictReplyBlock)reply;

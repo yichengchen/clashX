@@ -15,12 +15,11 @@ class ProxyGroupSpeedTestMenuItem: NSMenuItem {
 
     init(group: ClashProxy) {
         proxyGroup = group
-        switch group.type {
-        case .urltest, .fallback:
+        if group.type.isAutoGroup {
             testType = .reTest
-        case .select:
+        } else if group.type == .select {
             testType = .benchmark
-        default:
+        } else {
             testType = .unknown
         }
 
@@ -105,29 +104,33 @@ fileprivate class ProxyGroupSpeedTestMenuItemView: MenuItemBaseView {
             testGroup.enter()
             ApiRequest.getProxyDelay(proxyName: proxyName) { delay in
                 let delayStr = delay == 0 ? NSLocalizedString("fail", comment: "") : "\(delay) ms"
-                NotificationCenter.default.post(name: kSpeedTestFinishForProxy,
+                NotificationCenter.default.post(name: .speedTestFinishForProxy,
                                                 object: nil,
-                                                userInfo: ["proxyName": proxyName, "delay": delayStr])
+                                                userInfo: ["proxyName": proxyName, "delay": delayStr, "rawValue": delay])
                 testGroup.leave()
             }
         }
 
-        if providers.count > 0 {
-            for provider in providers {
-                ApiRequest.healthCheck(proxy: provider)
-            }
-            enclosingMenuItem?.menu?.cancelTracking()
+        label.stringValue = NSLocalizedString("Testing", comment: "")
+        enclosingMenuItem?.isEnabled = false
+        setNeedsDisplay()
 
-        } else {
-            label.stringValue = NSLocalizedString("Testing", comment: "")
-            enclosingMenuItem?.isEnabled = false
-            setNeedsDisplay()
-            testGroup.notify(queue: .main) {
-                [weak self] in
-                guard let self = self, let menu = self.enclosingMenuItem else { return }
-                self.label.stringValue = menu.title
-                menu.isEnabled = true
-                self.setNeedsDisplay()
+        for provider in providers {
+            testGroup.enter()
+
+            ApiRequest.healthCheck(proxy: provider) {
+                testGroup.leave()
+            }
+        }
+
+        testGroup.notify(queue: .main) {
+            [weak self] in
+            guard let self = self, let menu = self.enclosingMenuItem else { return }
+            self.label.stringValue = menu.title
+            menu.isEnabled = true
+            self.setNeedsDisplay()
+            if providers.count > 0 {
+                MenuItemFactory.refreshExistingMenuItems()
             }
         }
     }

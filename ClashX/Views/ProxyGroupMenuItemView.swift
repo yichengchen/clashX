@@ -9,22 +9,29 @@
 import Cocoa
 
 class ProxyGroupMenuItemView: MenuItemBaseView {
-    let groupNameLabel: NSTextField
-    let selectProxyLabel: NSTextField
-    let arrowLabel = NSTextField(labelWithString: "▶")
+    private let groupNameLabel: NSTextField
+    private let selectProxyLabel: NSTextField
+    private let arrowLabel: NSControl = {
+        if #available(macOS 11, *) {
+            let image = NSImage(named: NSImage.goForwardTemplateName)!.withSymbolConfiguration(NSImage.SymbolConfiguration(pointSize: 14, weight: .bold, scale: .small))!
+            return NSImageView(image: image)
+        } else {
+            let label = NSTextField(labelWithString: "▶")
+            label.setContentHuggingPriority(.required, for: .horizontal)
+            label.setContentCompressionResistancePriority(.required, for: .horizontal)
+            label.textColor = NSColor.labelColor
+            return label
+        }
+    }()
+
+    private var leftPaddingConstraint: NSLayoutConstraint?
+    private let leftPadding: CGFloat = 20
 
     override var cells: [NSCell?] {
         return [groupNameLabel.cell, selectProxyLabel.cell, arrowLabel.cell]
     }
 
-    override var isHighlighted: Bool {
-        set {}
-        get {
-            return enclosingMenuItem?.isHighlighted ?? false
-        }
-    }
-
-    init(group: ClashProxyName, targetProxy: ClashProxyName) {
+    init(group: ClashProxyName, targetProxy: ClashProxyName, hasLeftPadding: Bool) {
         groupNameLabel = VibrancyTextField(labelWithString: group)
         selectProxyLabel = VibrancyTextField(labelWithString: targetProxy)
         super.init(autolayout: true)
@@ -32,14 +39,20 @@ class ProxyGroupMenuItemView: MenuItemBaseView {
         // arrow
         effectView.addSubview(arrowLabel)
         arrowLabel.translatesAutoresizingMaskIntoConstraints = false
-        arrowLabel.rightAnchor.constraint(equalTo: effectView.rightAnchor, constant: -10).isActive = true
+        let rightConstraint: CGFloat
+        if #available(macOS 11, *) {
+            rightConstraint = -8
+        } else {
+            rightConstraint = -10
+        }
+        arrowLabel.rightAnchor.constraint(equalTo: effectView.rightAnchor, constant: rightConstraint).isActive = true
         arrowLabel.centerYAnchor.constraint(equalTo: effectView.centerYAnchor).isActive = true
-        arrowLabel.setContentHuggingPriority(.required, for: .horizontal)
-        arrowLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+
         // group
         groupNameLabel.translatesAutoresizingMaskIntoConstraints = false
         effectView.addSubview(groupNameLabel)
-        groupNameLabel.leftAnchor.constraint(equalTo: effectView.leftAnchor, constant: 20).isActive = true
+        leftPaddingConstraint = groupNameLabel.leftAnchor.constraint(equalTo: effectView.leftAnchor, constant: leftPadding)
+        leftPaddingConstraint?.isActive = true
         groupNameLabel.centerYAnchor.constraint(equalTo: effectView.centerYAnchor).isActive = true
         groupNameLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
 
@@ -60,10 +73,44 @@ class ProxyGroupMenuItemView: MenuItemBaseView {
         selectProxyLabel.font = type(of: self).labelFont
         groupNameLabel.textColor = NSColor.labelColor
         selectProxyLabel.textColor = NSColor.secondaryLabelColor
-        arrowLabel.textColor = NSColor.labelColor
+        // noti
+        NotificationCenter.default.addObserver(self, selector: #selector(proxyInfoDidUpdate(note:)), name: .proxyUpdate(for: group), object: nil)
+
+        if #available(macOS 11, *) {
+            updateLeftMenuPadding(show: hasLeftPadding)
+            NotificationCenter.default.addObserver(self, selector: #selector(showLeftPaddingUpdate(note:)), name: .proxyMeneViewShowLeftPadding, object: nil)
+        }
+    }
+
+    private func updateLeftMenuPadding(show: Bool) {
+        if show {
+            leftPaddingConstraint?.constant = leftPadding
+        } else {
+            leftPaddingConstraint?.constant = 10
+        }
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc private func proxyInfoDidUpdate(note: NSNotification) {
+        guard let info = note.object as? ClashProxy else { assertionFailure(); return }
+        selectProxyLabel.stringValue = info.now ?? ""
+    }
+
+    @objc private func showLeftPaddingUpdate(note: NSNotification) {
+        guard let show = note.userInfo?["show"] as? Bool else { assertionFailure(); return }
+        updateLeftMenuPadding(show: show)
+    }
+}
+
+extension ProxyGroupMenuItemView: ProxyGroupMenuHighlightDelegate {
+    func highlight(item: NSMenuItem?) {
+        isHighlighted = item == enclosingMenuItem
     }
 }

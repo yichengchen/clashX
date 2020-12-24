@@ -23,18 +23,26 @@ struct SavedProxyModel: Codable {
         if let data = UserDefaults.standard.object(forKey: key) as? Data,
             let models = try? JSONDecoder().decode([SavedProxyModel].self, from: data) {
             var set = Set<String>()
-            return models.filter({ model in
+            let filtered = models.filter({ model in
                 let pass = !set.contains(model.key)
                 set.insert(model.key)
+                if !pass {
+                    print("pass", model)
+                }
                 return pass
             })
+            return filtered
         }
         return []
     }
 
     static func save(_ models: [SavedProxyModel]) {
-        if let data = try? JSONEncoder().encode(models) {
+        do {
+            let data = try JSONEncoder().encode(models)
             UserDefaults.standard.set(data, forKey: key)
+        } catch let err {
+            Logger.log("save model fail,\(err)", level: .error)
+            assertionFailure()
         }
     }
 }

@@ -1,6 +1,0 @@
-framework module Pods_ClashX {
-  umbrella header "Pods-ClashX-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -9,6 +9,7 @@ import Foundation
 
 extension String {
     func isUrlVaild() -> Bool {
+        guard count > 0 else { return false }
         guard let url = URL(string: self) else { return false }
 
         guard url.host != nil,

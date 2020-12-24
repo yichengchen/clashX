@@ -5,27 +5,19 @@ on: [push]
 jobs:
   build:
     runs-on: macOS-latest
-    env:
-      CODE_SIGN_IDENTITY: "Developer ID Application: Fuzhou West2Online Internet Inc. (MEWHFZ92DY)"
-  
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: import certs
       run: |
-        openssl aes-256-cbc -k  "${{ secrets.ENCRYPTION_SECRET }}" -in ".github/certs/dist.p12.enc" -d -a -out ".github/certs/dist.p12"
-        security create-keychain -p mysecretpassword build.keychain
-        security default-keychain -s build.keychain
-        security unlock-keychain -p mysecretpassword build.keychain
-        security set-keychain-settings -t 3600 -u build.keychain
-        security import "./.github/certs/dist.p12" -k build.keychain -T /usr/bin/codesign -P ""
-        bash .github/enableKeyChain.sh
+        echo `/usr/bin/xcodebuild -version`
+        openssl aes-256-cbc -k  "${{ secrets.ENCRYPTION_SECRET }}" -in ".github/certs/dist.p12.enc" -d -a -out ".github/certs/dist.p12" -md md5
         gem install bundler:1.16.2
         bundle install
 
     - name: setup Go
-      uses: actions/setup-go@v1
+      uses: actions/setup-go@v2
       with:
-        go-version: 1.13.x
+        go-version: 1.15.x
 
     - name: update beta build version
       if: contains(github.event.head_commit.message, '[beta]') && !startsWith(github.ref, 'refs/tags/')
@@ -34,13 +26,14 @@ jobs:
         bundle exec fastlane run set_info_plist_value path:ClashX/Info.plist key:BETA value:YES
 
     - name: build
+      env:
+        CODE_SIGN_IDENTITY: "Developer ID Application: Fuzhou West2Online Internet Inc. (MEWHFZ92DY)"
       run: |
         bash install_dependency.sh
         cd ClashX
-        python3 build_clash.py
         python3 add_build_info.py
         cd ..
-        bundle exec fastlane gym -s ClashX
+        bundle exec fastlane build
         echo "Checking SMJobBless Vailded"
         python SMJobBlessUtil.py check ClashX.app
         echo "Check done"
@@ -90,7 +83,7 @@ jobs:
       with:
         files: ClashX.dmg
         # draft: true
-        # prerelease: true
+        prerelease: true
 
     - name: update gitpage
       if: startsWith(github.ref, 'refs/tags/')

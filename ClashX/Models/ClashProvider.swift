@@ -14,15 +14,14 @@ class ClashProviderResp: Codable {
         return allProviders.filter({ $0.value.vehicleType != .Compatible })
     }()
 
-    private init() {
+    init() {
         allProviders = [:]
     }
 
-    static func create(_ data: Data?) -> ClashProviderResp {
-        guard let data = data else { return ClashProviderResp() }
+    static var decoder: JSONDecoder {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .formatted(DateFormatter.js)
-        return (try? decoder.decode(ClashProviderResp.self, from: data)) ?? ClashProviderResp()
+        return decoder
     }
 
     private enum CodingKeys: String, CodingKey {

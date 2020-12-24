@@ -138,7 +138,7 @@ class RemoteConfigManager {
         }
     }
 
-    static func getRemoteConfigData(config: RemoteConfigModel, complete: @escaping ((String?) -> Void)) {
+    static func getRemoteConfigData(config: RemoteConfigModel, complete: @escaping ((String?, String?) -> Void)) {
         guard var urlRequest = try? URLRequest(url: config.url, method: .get) else {
             assertionFailure()
             Logger.log("[getRemoteConfigData] url incorrect,\(config.name) \(config.url)")
@@ -147,12 +147,12 @@ class RemoteConfigManager {
         urlRequest.cachePolicy = .reloadIgnoringCacheData
 
         AF.request(urlRequest).responseString(encoding: .utf8) { res in
-            complete(try? res.result.get())
+            complete(try? res.result.get(), res.response?.suggestedFilename)
         }
     }
 
     static func updateConfig(config: RemoteConfigModel, complete: ((String?) -> Void)? = nil) {
-        getRemoteConfigData(config: config) { configString in
+        getRemoteConfigData(config: config) { configString, suggestedFilename in
             guard let newConfig = configString else {
                 complete?(NSLocalizedString("Download fail", comment: ""))
                 return
@@ -163,20 +163,43 @@ class RemoteConfigManager {
                 complete?(NSLocalizedString("Remote Config Format Error", comment: "") + ": " + error)
                 return
             }
-            let savePath = kConfigFolderPath.appending(config.name).appending(".yaml")
 
-            if config.name == ConfigManager.selectConfigName {
+            if let suggestName = suggestedFilename, config.isPlaceHolderName {
+                let name = URL(fileURLWithPath: suggestName).deletingPathExtension().lastPathComponent
+                if !shared.configs.contains(where: { $0.name == name }) {
+                    config.name = name
+                }
+            }
+            config.isPlaceHolderName = false
+
+            if iCloudManager.shared.isICloudEnable() {
+                ConfigFileManager.shared.stopWatchConfigFile()
+            } else if config.name == ConfigManager.selectConfigName {
                 ConfigFileManager.shared.pauseForNextChange()
             }
 
-            do {
-                if FileManager.default.fileExists(atPath: savePath) {
-                    try FileManager.default.removeItem(atPath: savePath)
+            let saveAction: ((String) -> Void) = {
+                savePath in
+                do {
+                    if FileManager.default.fileExists(atPath: savePath) {
+                        try FileManager.default.removeItem(atPath: savePath)
+                    }
+                    try newConfig.write(to: URL(fileURLWithPath: savePath), atomically: true, encoding: .utf8)
+                    complete?(nil)
+                } catch let err {
+                    complete?(err.localizedDescription)
                 }
-                try newConfig.write(to: URL(fileURLWithPath: savePath), atomically: true, encoding: .utf8)
-                complete?(nil)
-            } catch let err {
-                complete?(err.localizedDescription)
+            }
+
+            if iCloudManager.shared.isICloudEnable() {
+                iCloudManager.shared.getUrl { url in
+                    guard let url = url else { return }
+                    let saveUrl = url.appendingPathComponent(Paths.configFileName(for: config.name))
+                    saveAction(saveUrl.path)
+                }
+            } else {
+                let savePath = Paths.localConfigPath(for: config.name)
+                saveAction(savePath)
             }
         }
     }

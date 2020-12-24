@@ -35,9 +35,22 @@ class MenuItemBaseView: NSView {
         return []
     }
 
-    static let labelFont = NSFont.menuBarFont(ofSize: 0)
+    static let menuBarHeight: CGFloat = {
+        if #available(macOS 11, *) {
+            return 22
+        } else {
+            return 20
+        }
+    }()
 
-    init(frame frameRect: NSRect = NSRect(x: 0, y: 0, width: 0, height: 20), autolayout: Bool) {
+    static let labelFont: NSFont = {
+        if #available(macOS 11, *) {
+            return NSFont.menuFont(ofSize: 0)
+        }
+        return NSFont.monospacedDigitSystemFont(ofSize: 14, weight: .regular)
+    }()
+
+    init(frame frameRect: NSRect = NSRect(x: 0, y: 0, width: 0, height: menuBarHeight), autolayout: Bool) {
         self.autolayout = autolayout
         super.init(frame: frameRect)
         setupView()
@@ -59,13 +72,24 @@ class MenuItemBaseView: NSView {
 
     private func setupView() {
         translatesAutoresizingMaskIntoConstraints = false
-        heightAnchor.constraint(equalToConstant: 20).isActive = true
+        heightAnchor.constraint(equalToConstant: type(of: self).menuBarHeight).isActive = true
         // background
         addSubview(effectView)
         effectView.translatesAutoresizingMaskIntoConstraints = false
+        if #available(macOS 11, *) {
+            effectView.wantsLayer = true
+            effectView.layer?.cornerRadius = 3
+            effectView.layer?.masksToBounds = true
+        }
         if autolayout {
-            effectView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-            effectView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+            let padding: CGFloat
+            if #available(macOS 11, *) {
+                padding = 5
+            } else {
+                padding = 0
+            }
+            effectView.leftAnchor.constraint(equalTo: leftAnchor, constant: padding).isActive = true
+            effectView.rightAnchor.constraint(equalTo: rightAnchor, constant: -padding).isActive = true
             effectView.topAnchor.constraint(equalTo: topAnchor).isActive = true
             effectView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         }
@@ -76,7 +100,11 @@ class MenuItemBaseView: NSView {
     override func layout() {
         super.layout()
         if !autolayout {
-            effectView.frame = bounds
+            if #available(macOS 11, *) {
+                effectView.frame = CGRect(x: 5, y: 0, width: bounds.width - 10, height: bounds.height)
+            } else {
+                effectView.frame = bounds
+            }
         }
     }
 

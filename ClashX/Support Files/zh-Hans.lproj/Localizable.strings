@@ -1,6 +1,8 @@
-
 /* No comment provided by engineer. */
 "Add a remote config" = "添加托管配置文件";
+
+/* No comment provided by engineer. */
+"Add a remote control config" = "添加远程控制器配置";
 
 /* No comment provided by engineer. */
 "Apply and Quit" = "应用并退出";
@@ -27,7 +29,7 @@
 "ClashX fail to create ~/.config/clash folder. Please check privileges or manually create folder and restart ClashX." = "ClashX 创建 ~/.config/clash 文件夹失败，请检查权限设置或者手动创建文件夹后重启 ClashX";
 
 /* No comment provided by engineer. */
-"ClashX needs to install a helper tool with administrator privileges to set system proxy quickly." = "ClashX 需要使用管理员权限安装一个帮助程序来帮助设置系统代理。";
+"ClashX needs to install/update a helper tool with administrator privileges to set system proxy quickly.If not helper tool installed, ClashX won't be able to set your system proxy" = "ClashX 需要使用管理员权限安装/更新一个帮助程序来帮助设置系统代理。如不安装,ClashX的设置系统代理功能将失效。";
 
 /* No comment provided by engineer. */
 "ClashX Start Error!" = "ClashX 启动出错";
@@ -39,6 +41,12 @@
 "Config loading Fail!" = "配置文件加载失败";
 
 /* No comment provided by engineer. */
+"Custom your GEOIP MMDB download address." = "自定义下载地址";
+
+/* No comment provided by engineer. */
+"Details" = "查看详情";
+
+/* No comment provided by engineer. */
 "Direct" = "直连";
 
 /* No comment provided by engineer. */
@@ -46,6 +54,9 @@
 
 /* No comment provided by engineer. */
 "Download fail" = "下载失败";
+
+/* No comment provided by engineer. */
+"Enhance proxy list render" = "增强渲染代理列表";
 
 /* No comment provided by engineer. */
 "fail" = "失败";
@@ -61,6 +72,9 @@
 
 /* No comment provided by engineer. */
 "Invalid input" = "输入不合法";
+
+/* No comment provided by engineer. */
+"Lecgy Install" = "传统安装";
 
 /* No comment provided by engineer. */
 "Need to Restart the ClashX to Take effect, Please start clashX manually" = "需要重启ClashX生效，请手动启动ClashX";
@@ -117,7 +131,7 @@
 "Succeed!" = "成功！";
 
 /* No comment provided by engineer. */
-"Succees" = "成功";
+"Success" = "成功";
 
 /* No comment provided by engineer. */
 "Success!" = "成功！";
@@ -135,6 +149,9 @@
 "The remote config name is duplicated" = "托管配置文件名称重复";
 
 /* No comment provided by engineer. */
+"This version of ClashX contains a break change due to clash core 1.0 released. Check if your config is not working properly." = "由于Clash Core发布1.0版本，使用此版本的 ClashX 可能需要更新配置内容\n前往 https://github.com/Dreamacro/clash/wiki/breaking-changes-in-1.0.0 查看详情";
+
+/* No comment provided by engineer. */
 "Update GEOIP Database" = "更新IP数据库";
 
 /* No comment provided by engineer. */
@@ -145,6 +162,9 @@
 
 /* No comment provided by engineer. */
 "URL is not valid" = "链接不合法";
+
+/* No comment provided by engineer. */
+"Use iCloud" = "使用iCloud";
 
 /* No comment provided by engineer. */
 "Use reload config to try reconnect." = "使用重载配置文件按钮尝试重新连接";

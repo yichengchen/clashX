@@ -16,29 +16,6 @@ class JsBridgeUtil {
 
         bridge.setWebViewDelegate(delegate)
 
-        // 文件存储
-        bridge.registerHandler("readConfigString") { anydata, responseCallback in
-            let configData = NSData(contentsOfFile: kCurrentConfigPath) ?? NSData()
-            let configStr = String(data: configData as Data, encoding: .utf8) ?? ""
-            responseCallback?(configStr)
-        }
-
-        bridge.registerHandler("writeConfigWithString") { anydata, responseCallback in
-            guard let str = anydata as? String else {
-                responseCallback?(false)
-                return
-            }
-            do {
-                if FileManager.default.fileExists(atPath: kCurrentConfigPath) {
-                    try FileManager.default.removeItem(at: URL(fileURLWithPath: kCurrentConfigPath))
-                }
-                try str.write(to: URL(fileURLWithPath: kCurrentConfigPath), atomically: true, encoding: .utf8)
-
-            } catch {
-                responseCallback?(false)
-            }
-        }
-
         bridge.registerHandler("isSystemProxySet") { anydata, responseCallback in
             responseCallback?(ConfigManager.shared.proxyPortAutoSet)
         }
@@ -58,20 +35,6 @@ class JsBridgeUtil {
             }
         }
 
-        bridge.registerHandler("setPasteboard") { anydata, responseCallback in
-            if let str = anydata as? String {
-                NSPasteboard.general.setString(str, forType: .string)
-                responseCallback?(true)
-            } else {
-                responseCallback?(false)
-            }
-        }
-
-        bridge.registerHandler("getPasteboard") { anydata, responseCallback in
-            let str = NSPasteboard.general.string(forType: NSPasteboard.PasteboardType.string)
-            responseCallback?(str ?? "")
-        }
-
         bridge.registerHandler("getStartAtLogin") { _, responseCallback in
             responseCallback?(LaunchAtLogin.shared.isEnabled)
         }
@@ -79,6 +42,20 @@ class JsBridgeUtil {
         bridge.registerHandler("setStartAtLogin") { anydata, responseCallback in
             if let enable = anydata as? Bool {
                 LaunchAtLogin.shared.isEnabled = enable
+                responseCallback?(true)
+            } else {
+                responseCallback?(false)
+            }
+        }
+
+        bridge.registerHandler("getBreakConnections") { _, responseCallback in
+            responseCallback?(ConnectionManager.enableAutoClose)
+        }
+
+        bridge.registerHandler("setBreakConnections") { anydata, responseCallback in
+            if let enable = anydata as? Bool {
+                ConnectionManager.enableAutoClose = enable
+                ConnectionManager.updateMenuItemStatus()
                 responseCallback?(true)
             } else {
                 responseCallback?(false)
@@ -102,10 +79,17 @@ class JsBridgeUtil {
         }
 
         bridge.registerHandler("apiInfo") { _, callback in
+            var host = "127.0.0.1"
+            var port = ConfigManager.shared.apiPort
+            if let override = ConfigManager.shared.overrideApiURL,
+                let overridedHost = override.host {
+                host = overridedHost
+                port = "\(override.port ?? 80)"
+            }
             let data = [
-                "host": "127.0.0.1",
-                "port": ConfigManager.shared.apiPort,
-                "secret": ConfigManager.shared.apiSecret,
+                "host": host,
+                "port": port,
+                "secret": ConfigManager.shared.overrideSecret ?? ConfigManager.shared.apiSecret,
             ]
             callback?(data)
         }

@@ -1,6 +1,8 @@
-
 /* No comment provided by engineer. */
 "Add a remote config" = "Add a remote config";
+
+/* No comment provided by engineer. */
+"Add a remote control config" = "Add a remote control config";
 
 /* No comment provided by engineer. */
 "Apply and Quit" = "Apply and Quit";
@@ -27,7 +29,7 @@
 "ClashX fail to create ~/.config/clash folder. Please check privileges or manually create folder and restart ClashX." = "ClashX fail to create ~/.config/clash folder. Please check privileges or manually create folder and restart ClashX.";
 
 /* No comment provided by engineer. */
-"ClashX needs to install a helper tool with administrator privileges to set system proxy quickly." = "ClashX needs to install a helper tool with administrator privileges to set system proxy quickly.";
+"ClashX needs to install/update a helper tool with administrator privileges to set system proxy quickly.If not helper tool installed, ClashX won't be able to set your system proxy" = "ClashX needs to install/update a helper tool with administrator privileges to set system proxy quickly.If not helper tool installed, ClashX won't be able to set your system proxy";
 
 /* No comment provided by engineer. */
 "ClashX Start Error!" = "ClashX Start Error!";
@@ -39,6 +41,12 @@
 "Config loading Fail!" = "Config loading Fail!";
 
 /* No comment provided by engineer. */
+"Custom your GEOIP MMDB download address." = "Custom your GEOIP MMDB download address.";
+
+/* No comment provided by engineer. */
+"Details" = "Details";
+
+/* No comment provided by engineer. */
 "Direct" = "Direct";
 
 /* No comment provided by engineer. */
@@ -46,6 +54,9 @@
 
 /* No comment provided by engineer. */
 "Download fail" = "Download fail";
+
+/* No comment provided by engineer. */
+"Enhance proxy list render" = "Enhance proxy list render";
 
 /* No comment provided by engineer. */
 "fail" = "fail";
@@ -61,6 +72,9 @@
 
 /* No comment provided by engineer. */
 "Invalid input" = "Invalid input";
+
+/* No comment provided by engineer. */
+"Lecgy Install" = "Lecgy Install";
 
 /* No comment provided by engineer. */
 "Need to Restart the ClashX to Take effect, Please start clashX manually" = "Need to Restart the ClashX to Take effect, Please start clashX manually";
@@ -117,7 +131,7 @@
 "Succeed!" = "Succeed!";
 
 /* No comment provided by engineer. */
-"Succees" = "Succees";
+"Success" = "Success";
 
 /* No comment provided by engineer. */
 "Success!" = "Success!";
@@ -135,6 +149,9 @@
 "The remote config name is duplicated" = "The remote config name is duplicated";
 
 /* No comment provided by engineer. */
+"This version of ClashX contains a break change due to clash core 1.0 released. Check if your config is not working properly." = "This version of ClashX contains a break change due to clash core 1.0 released. Check if your config is not working properly.";
+
+/* No comment provided by engineer. */
 "Update GEOIP Database" = "Update GEOIP Database";
 
 /* No comment provided by engineer. */
@@ -145,6 +162,9 @@
 
 /* No comment provided by engineer. */
 "URL is not valid" = "URL is not valid";
+
+/* No comment provided by engineer. */
+"Use iCloud" = "Use iCloud";
 
 /* No comment provided by engineer. */
 "Use reload config to try reconnect." = "Use reload config to try reconnect.";

@@ -10,12 +10,6 @@ import Cocoa
 
 struct ClashConnectionSnapShot: Codable {
     let connections: [Connection]
-
-    static func fromData(_ data: Data) -> ClashConnectionSnapShot {
-        let decoder = JSONDecoder()
-        let model = try? decoder.decode(ClashConnectionSnapShot.self, from: data)
-        return model ?? ClashConnectionSnapShot(connections: [])
-    }
 }
 
 extension ClashConnectionSnapShot {

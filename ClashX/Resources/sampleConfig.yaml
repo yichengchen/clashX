@@ -4,25 +4,25 @@
 ## 这份文件是clashX的基础配置文件，请尽量新建配置文件进行修改。
 ## ！！！只有这份文件的端口设置会随ClashX启动生效
 
-## 如果您不知道如何操作，请参阅 SS-Rule-Snippet：https://github.com/Hackl0us/SS-Rule-Snippet/blob/master/LAZY_RULES/clash.yaml
-## 或者官方Github文档 https://github.com/Dreamacro/clash/blob/master/README.md
+## 如果您不知道如何操作，请参阅 官方Github文档 https://github.com/Dreamacro/clash/blob/dev/README.md
 #---------------------------------------------------#
 
-port: 7890
-socks-port: 7891
-allow-lan: false
-mode: Rule
-log-level: info
+# (HTTP and SOCKS5 in one port)
+mixed-port: 7890
+# RESTful API for clash
 external-controller: 127.0.0.1:9090
+allow-lan: false
+mode: rule
+log-level: warning
 
-Proxy:
+proxies:
 
-Proxy Group:
+proxy-groups:
 
-Rule:
-- DOMAIN-SUFFIX,google.com,DIRECT
-- DOMAIN-KEYWORD,google,DIRECT
-- DOMAIN,google.com,DIRECT
-- DOMAIN-SUFFIX,ad.com,REJECT
-- GEOIP,CN,DIRECT
-- MATCH,DIRECT
+rules:
+  - DOMAIN-SUFFIX,google.com,DIRECT
+  - DOMAIN-KEYWORD,google,DIRECT
+  - DOMAIN,google.com,DIRECT
+  - DOMAIN-SUFFIX,ad.com,REJECT
+  - GEOIP,CN,DIRECT
+  - MATCH,DIRECT

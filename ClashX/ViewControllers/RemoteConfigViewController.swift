@@ -14,7 +14,7 @@ class RemoteConfigViewController: NSViewController {
     @IBOutlet var deleteButton: NSButton!
     @IBOutlet var updateButton: NSButton!
 
-    private var latestAddedConfigName: String?
+    private var latestAddedConfig: RemoteConfigModel?
 
     let disposeBag = DisposeBag()
 
@@ -34,7 +34,7 @@ class RemoteConfigViewController: NSViewController {
                 guard let url = note.userInfo?["url"] as? String else { return }
 
                 let name = note.userInfo?["name"] as? String
-                self.showAdd(defaultUrl: url, name: name)
+                self.showAdd(defaultUrl: url, name: name, allowAlt: true)
             }.disposed(by: disposeBag)
     }
 
@@ -92,7 +92,7 @@ extension RemoteConfigViewController {
         alertView.messageText = NSLocalizedString("Add a remote config", comment: "")
         let remoteConfigInputView = RemoteConfigAddView.createFromNib()
         if let defaultUrl = defaultUrl {
-            remoteConfigInputView.setUrl(string: defaultUrl, name: name, defaultName: defaultUrl)
+            remoteConfigInputView.setUrl(string: defaultUrl, name: name, defaultName: defaultName)
         }
         alertView.accessoryView = remoteConfigInputView
         let response = alertView.runModal()
@@ -106,7 +106,8 @@ extension RemoteConfigViewController {
             return
         }
 
-        let configName = remoteConfigInputView.getConfigName()
+        let configName = remoteConfigInputView.getConfigName().0
+        let isPlaceHolderName = remoteConfigInputView.getConfigName().1
         let configUrl = remoteConfigInputView.getUrlString()
 
         if let existed = RemoteConfigManager.shared.configs.first(where: { $0.name == configName }) {
@@ -115,16 +116,18 @@ extension RemoteConfigViewController {
                 return
             }
             existed.url = configUrl
+            latestAddedConfig = existed
             requestUpdate(config: existed)
         } else {
             let remoteConfig = RemoteConfigModel(url: configUrl,
                                                  name: configName,
                                                  updateTime: nil)
+            remoteConfig.isPlaceHolderName = !isPlaceHolderName
             RemoteConfigManager.shared.configs.append(remoteConfig)
             requestUpdate(config: remoteConfig)
+            latestAddedConfig = remoteConfig
         }
 
-        latestAddedConfigName = configName
         tableView.reloadData()
         updateButtonStatus()
     }
@@ -145,7 +148,7 @@ extension RemoteConfigViewController {
                 config.updateTime = Date()
                 RemoteConfigManager.shared.saveConfigs()
 
-                if config.name == self.latestAddedConfigName {
+                if config == self.latestAddedConfig {
                     AppDelegate.shared.updateConfig(configName: config.name)
                 } else if config.name == ConfigManager.selectConfigName {
                     AppDelegate.shared.updateConfig()
@@ -164,7 +167,11 @@ extension RemoteConfigViewController: NSTableViewDelegate {
     @objc func tableViewDidDoubleClick(tableView: NSTableView) {
         let row = tableView.clickedRow
         guard let config = RemoteConfigManager.shared.configs[safe: row] else { return }
-        showAdd(defaultUrl: config.url, defaultName: nil, name: config.name, allowAlt: true)
+        if config.isPlaceHolderName {
+            showAdd(defaultUrl: config.url, defaultName: config.name, name: nil, allowAlt: true)
+        } else {
+            showAdd(defaultUrl: config.url, defaultName: nil, name: config.name, allowAlt: true)
+        }
     }
 }
 
@@ -209,15 +216,17 @@ class RemoteConfigAddView: NSView, NibLoadable {
         return urlTextField.stringValue
     }
 
-    func getConfigName() -> String {
+    /// Get the config name
+    /// - Returns: return (name, isUserInput)
+    func getConfigName() -> (String, Bool) {
         if configNameTextField.stringValue.count > 0 {
-            return configNameTextField.stringValue
+            return (configNameTextField.stringValue, true)
         }
-        return configNameTextField.placeholderString ?? ""
+        return (configNameTextField.placeholderString ?? "", false)
     }
 
     func isVaild() -> Bool {
-        return urlTextField.stringValue.isUrlVaild() && getConfigName().count > 0
+        return urlTextField.stringValue.isUrlVaild() && getConfigName().0.count > 0
     }
 
     func setUrl(string: String, name: String? = nil, defaultName: String?) {

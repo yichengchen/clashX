@@ -1,4 +1,3 @@
-
 /* Class = "NSMenuItem"; title = "ERROR"; ObjectID = "0iu-lB-eZN"; */
 "0iu-lB-eZN.title" = "ERROR";
 
@@ -50,8 +49,8 @@
 /* Class = "NSMenuItem"; title = "SILENT"; ObjectID = "dVr-Xp-C0C"; */
 "dVr-Xp-C0C.title" = "SILENT";
 
-/* Class = "NSMenuItem"; title = "Open config Folder"; ObjectID = "DwE-WX-ETZ"; */
-"DwE-WX-ETZ.title" = "打开配置文件夹";
+/* Class = "NSMenuItem"; title = "Open local config Folder"; ObjectID = "DwE-WX-ETZ"; */
+"DwE-WX-ETZ.title" = "打开本地配置文件夹";
 
 /* Class = "NSMenuItem"; title = "Manage"; ObjectID = "Dwg-Qb-2AU"; */
 "Dwg-Qb-2AU.title" = "管理";
@@ -160,3 +159,30 @@
 
 /* Class = "NSMenuItem"; title = "Copy shell command (External IP)"; ObjectID = "7wl-vK-5JO"; */
 "7wl-vK-5JO.title" = "复制终端代理命令(外部IP)";
+
+/* Class = "NSTableColumn"; headerCell.title = "Api Secret"; ObjectID = "5hn-k8-CWe"; */
+"5hn-k8-CWe.headerCell.title" = "Api Secret";
+
+/* Class = "NSTextFieldCell"; title = "External Controls"; ObjectID = "9gE-NX-2wJ"; */
+"9gE-NX-2wJ.title" = "远程控制器";
+
+/* Class = "NSButtonCell"; title = "Delete"; ObjectID = "B2w-4r-5Kh"; */
+"B2w-4r-5Kh.title" = "删除";
+
+/* Class = "NSButtonCell"; title = "Add"; ObjectID = "ZcF-10-jsl"; */
+"ZcF-10-jsl.title" = "添加";
+
+/* Class = "NSViewController"; title = "External Manager"; ObjectID = "s6y-wL-pnr"; */
+"s6y-wL-pnr.title" = "远程控制器";
+
+/* Class = "NSTableColumn"; headerCell.title = "Api Url"; ObjectID = "yO6-uZ-IRv"; */
+"yO6-uZ-IRv.headerCell.title" = "Api Url";
+
+/* Class = "NSMenu"; title = "Remote Controller"; ObjectID = "1He-Eq-fSy"; */
+"1He-Eq-fSy.title" = "远程控制";
+
+/* Class = "NSMenuItem"; title = "Remote Controller"; ObjectID = "BRR-WK-aeP"; */
+"BRR-WK-aeP.title" = "远程控制";
+
+/* Class = "NSMenuItem"; title = " Manage"; ObjectID = "hlb-KQ-Fdr"; */
+"hlb-KQ-Fdr.title" = "管理";

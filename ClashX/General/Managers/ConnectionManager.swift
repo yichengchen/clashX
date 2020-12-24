@@ -15,10 +15,13 @@ class ConnectionManager {
         }
     }
 
+    private static var closeMenuItem: NSMenuItem?
+
     static func addCloseOptionMenuItem(_ menu: inout NSMenu) {
         let item = NSMenuItem(title: NSLocalizedString("Auto Close Connection", comment: ""), action: #selector(optionMenuItemTap(sender:)), keyEquivalent: "")
         item.target = ConnectionManager.self
         menu.addItem(item)
+        closeMenuItem = item
         updateMenuItemStatus(item)
     }
 
@@ -33,29 +36,14 @@ class ConnectionManager {
         }
     }
 
-    static func closeConnectionExpectDirect() {
-        guard enableAutoClose else { return }
-        ApiRequest.getConnections { conns in
-            for conn in conns {
-                if !conn.chains.contains("DIRECT") {
-                    ApiRequest.closeConnection(conn)
-                }
-            }
-        }
-    }
-
     static func closeAllConnection() {
-        ApiRequest.getConnections { conns in
-            for conn in conns {
-                ApiRequest.closeConnection(conn)
-            }
-        }
+        ApiRequest.closeAllConnection()
     }
 }
 
-private extension ConnectionManager {
-    static func updateMenuItemStatus(_ item: NSMenuItem) {
-        item.state = enableAutoClose ? .on : .off
+extension ConnectionManager {
+    static func updateMenuItemStatus(_ item: NSMenuItem? = closeMenuItem) {
+        item?.state = enableAutoClose ? .on : .off
     }
 
     @objc static func optionMenuItemTap(sender: NSMenuItem) {

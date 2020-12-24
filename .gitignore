@@ -1,3 +1,4 @@
+Pods/
 Country.mmdb
 Carthage
 ClashX.a
@@ -9,3 +10,9 @@ ClashX.app
 .idea
 *.pyc
 ClashX/clash/
+.DS_Store
+.vscode
+ClashX/goClash/goClash.h
+ClashX/goClash/goClash.a
+fastlane/report.xml
+ClashX/Resources/Country.mmdb.gz

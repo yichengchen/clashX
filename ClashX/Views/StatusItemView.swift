@@ -22,7 +22,14 @@ class StatusItemView: NSView {
 
     lazy var menuImage: NSImage = {
         let customImagePath = (NSHomeDirectory() as NSString).appendingPathComponent("/.config/clash/menuImage.png")
-        return NSImage(contentsOfFile: customImagePath) ?? NSImage(named: "menu_icon")!
+        if let image = NSImage(contentsOfFile: customImagePath) {
+            return image
+        }
+        if let imagePath = Bundle.main.path(forResource: "menu_icon@2x", ofType: "png"),
+           let image = NSImage(contentsOfFile: imagePath) {
+            return image
+        }
+        return NSImage()
     }()
 
     static func create(statusItem: NSStatusItem?) -> StatusItemView {
@@ -98,9 +105,6 @@ class StatusItemView: NSView {
     }
 
     func updateStatusItemView() {
-        if #available(macOS 10.14, *) {} else {
-            layout()
-        }
         statusItem?.updateImage(withView: self)
     }
 }

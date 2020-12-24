@@ -32,7 +32,8 @@ extension NSUserNotificationCenter {
     }
 
     func postConfigErrorNotice(msg: String) {
-        let configName = ConfigManager.selectConfigName.count > 0 ? "\(ConfigManager.selectConfigName).yaml" : ""
+        let configName = ConfigManager.selectConfigName.count > 0 ?
+            Paths.configFileName(for: ConfigManager.selectConfigName) : ""
 
         let message = "\(configName): \(msg)"
         post(title: NSLocalizedString("Config loading Fail!", comment: ""), info: message)

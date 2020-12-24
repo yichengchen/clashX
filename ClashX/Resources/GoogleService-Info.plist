@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>479047729214-ckc50jcdb2gtv4lureq8fpd0jnsvvckr.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.479047729214-ckc50jcdb2gtv4lureq8fpd0jnsvvckr</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCA-nue7HEcTKNTHm5MgQsYChDK-VFcOkY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>479047729214</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.west2online.ClashX</string>
+	<key>PROJECT_ID</key>
+	<string>clashx-apps</string>
+	<key>STORAGE_BUCKET</key>
+	<string>clashx-apps.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:479047729214:ios:0e3dfa8742d5ac3482916f</string>
+	<key>DATABASE_URL</key>
+	<string>https://clashx-apps.firebaseio.com</string>
+</dict>
+</plist>

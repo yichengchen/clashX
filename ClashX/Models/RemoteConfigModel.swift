@@ -10,9 +10,10 @@ import Cocoa
 
 class RemoteConfigModel: Codable {
     var url: String
-    let name: String
+    var name: String
     var updateTime: Date?
     var updating = false
+    var isPlaceHolderName = false
 
     init(url: String, name: String, updateTime: Date? = nil) {
         self.url = url
@@ -32,5 +33,11 @@ class RemoteConfigModel: Codable {
             return dateFormater.string(from: date)
         }
         return NSLocalizedString("Never", comment: "")
+    }
+}
+
+extension RemoteConfigModel: Equatable {
+    static func == (lhs: RemoteConfigModel, rhs: RemoteConfigModel) -> Bool {
+        return lhs.name == rhs.name && lhs.url == rhs.url
     }
 }

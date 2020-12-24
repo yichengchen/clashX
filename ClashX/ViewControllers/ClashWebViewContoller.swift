@@ -35,6 +35,11 @@ extension ClashWebViewWindowController: NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
         onWindowClose?()
+        if let contentVC = contentViewController as? ClashWebViewContoller, let win = window {
+            if !win.styleMask.contains(.fullScreen) {
+                contentVC.lastSize = win.frame.size
+            }
+        }
     }
 }
 
@@ -42,6 +47,20 @@ class ClashWebViewContoller: NSViewController {
     let webview: CustomWKWebView = CustomWKWebView()
     var bridge: WebViewJavascriptBridge?
     let disposeBag = DisposeBag()
+    let minSize = NSSize(width: 920, height: 580)
+    var lastSize: CGSize? {
+        set {
+            if let size = newValue {
+                UserDefaults.standard.set(NSStringFromSize(size), forKey: "ClashWebViewContoller.lastSize")
+            }
+        }
+        get {
+            if let str = UserDefaults.standard.value(forKey: "ClashWebViewContoller.lastSize") as? String {
+                return NSSizeFromString(str) as CGSize
+            }
+            return nil
+        }
+    }
 
     let effectView = NSVisualEffectView()
 
@@ -54,7 +73,7 @@ class ClashWebViewContoller: NSViewController {
     }
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 920, height: 580))
+        view = NSView(frame: NSRect(origin: .zero, size: minSize))
     }
 
     override func viewDidLoad() {
@@ -76,12 +95,12 @@ class ClashWebViewContoller: NSViewController {
 
         webview.configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
 
-        NotificationCenter.default.rx.notification(kConfigFileChange).bind {
+        NotificationCenter.default.rx.notification(.configFileChange).bind {
             [weak self] _ in
             self?.bridge?.callHandler("onConfigChange")
         }.disposed(by: disposeBag)
 
-        NotificationCenter.default.rx.notification(kReloadDashboard).bind {
+        NotificationCenter.default.rx.notification(.reloadDashboard).bind {
             [weak self] _ in
             self?.webview.reload()
         }.disposed(by: disposeBag)
@@ -98,25 +117,39 @@ class ClashWebViewContoller: NSViewController {
         view.window?.isOpaque = false
         view.window?.backgroundColor = NSColor.clear
         view.window?.styleMask.insert(.closable)
-        view.window?.styleMask.remove(.resizable)
-        view.window?.styleMask.remove(.miniaturizable)
-        view.window?.center()
+        view.window?.styleMask.insert(.resizable)
+        view.window?.styleMask.insert(.miniaturizable)
+        if #available(OSX 10.13, *) {
+            view.window?.toolbar = NSToolbar()
+            view.window?.toolbar?.showsBaselineSeparator = false
+            view.wantsLayer = true
+            view.layer?.cornerRadius = 10
+        }
 
+        view.window?.minSize = minSize
+        if let lastSize = lastSize, lastSize != .zero {
+            view.window?.setContentSize(lastSize)
+        }
+        view.window?.center()
         if NSApp.activationPolicy() == .accessory {
             NSApp.setActivationPolicy(.regular)
         }
     }
 
     func setupView() {
-        effectView.frame = view.bounds
         view.addSubview(effectView)
-        webview.frame = view.bounds
         view.addSubview(webview)
+    }
+
+    override func viewDidLayout() {
+        super.viewDidLayout()
+        effectView.frame = view.bounds
+        webview.frame = view.bounds
     }
 
     func loadWebRecourses() {
         // defaults write com.west2online.ClashX webviewUrl "your url"
-        let defaultUrl = "\(ConfigManager.apiUrl)/ui/"
+        let defaultUrl = "http://127.0.0.1:\(ConfigManager.shared.apiPort)/ui/"
         let url = UserDefaults.standard.string(forKey: "webviewUrl") ?? defaultUrl
         if let url = URL(string: url) {
             webview.load(URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 0))
