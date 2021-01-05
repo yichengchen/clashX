@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0AE14FEF25A35685007EF89B /* BSBacktraceLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AE14FEC25A35685007EF89B /* BSBacktraceLogger.m */; };
+		0AE14FF025A35685007EF89B /* AnrDetectUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE14FED25A35685007EF89B /* AnrDetectUtil.swift */; };
+		0AE14FF125A35685007EF89B /* AnrDetectThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE14FEE25A35685007EF89B /* AnrDetectThread.swift */; };
+		0D318CDAC9464E01DAD1F92B /* Pods_ClashX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0358BF8F0CBD7FF9A7EA4E30 /* Pods_ClashX.framework */; };
 		4913C82321157D0200F6B87C /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4913C82221157D0200F6B87C /* Notification.swift */; };
 		491E6203258A424D00313AEF /* CommonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 491E61FD258A424500313AEF /* CommonUtils.m */; };
 		491E6300258AEE3300313AEF /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 491E62FF258AEE3300313AEF /* AppIcon.icns */; };
@@ -122,6 +126,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0AE14FEB25A35685007EF89B /* BSBacktraceLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSBacktraceLogger.h; sourceTree = "<group>"; };
+		0AE14FEC25A35685007EF89B /* BSBacktraceLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSBacktraceLogger.m; sourceTree = "<group>"; };
+		0AE14FED25A35685007EF89B /* AnrDetectUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnrDetectUtil.swift; sourceTree = "<group>"; };
+		0AE14FEE25A35685007EF89B /* AnrDetectThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnrDetectThread.swift; sourceTree = "<group>"; };
 		4913C82221157D0200F6B87C /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		491E61FC258A424500313AEF /* CommonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtils.h; sourceTree = "<group>"; };
 		491E61FD258A424500313AEF /* CommonUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtils.m; sourceTree = "<group>"; };
@@ -239,6 +247,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0AE14FE925A35685007EF89B /* ANR */ = {
+			isa = PBXGroup;
+			children = (
+				0AE14FEA25A35685007EF89B /* Backtrace */,
+				0AE14FED25A35685007EF89B /* AnrDetectUtil.swift */,
+				0AE14FEE25A35685007EF89B /* AnrDetectThread.swift */,
+			);
+			path = ANR;
+			sourceTree = "<group>";
+		};
+		0AE14FEA25A35685007EF89B /* Backtrace */ = {
+			isa = PBXGroup;
+			children = (
+				0AE14FEB25A35685007EF89B /* BSBacktraceLogger.h */,
+				0AE14FEC25A35685007EF89B /* BSBacktraceLogger.m */,
+			);
+			path = Backtrace;
+			sourceTree = "<group>";
+		};
 		4913C82021157CEB00F6B87C /* Macro */ = {
 			isa = PBXGroup;
 			children = (
@@ -342,6 +369,7 @@
 			isa = PBXGroup;
 			children = (
 				4929F683258CE07500A435F6 /* UserDefaultWrapper.swift */,
+				0AE14FE925A35685007EF89B /* ANR */,
 				F976275D23634F18000EDEFE /* LoginServiceKit */,
 				49722FE9211F338B00650A41 /* Witness */,
 			);
@@ -680,6 +708,7 @@
 			files = (
 				49ABB749236B0F9E00535CD7 /* UnsafePointer+bridge.swift in Sources */,
 				499A485522ED707300F6C675 /* RemoteConfigViewController.swift in Sources */,
+				0AE14FF125A35685007EF89B /* AnrDetectThread.swift in Sources */,
 				49CF3B5C20CE8068001EBF94 /* ClashResourceManager.swift in Sources */,
 				4952C3D02117027C004A4FA8 /* ConfigFileManager.swift in Sources */,
 				49BC061C212931F4005A0FE7 /* AboutViewController.swift in Sources */,
@@ -705,10 +734,12 @@
 				492C4869210EE6B9004554A0 /* ApiRequest.swift in Sources */,
 				49CF3B6520CEE06C001EBF94 /* ConfigManager.swift in Sources */,
 				F9E754D0239CC21F00CEE7CC /* WebPortalManager.swift in Sources */,
+				0AE14FF025A35685007EF89B /* AnrDetectUtil.swift in Sources */,
 				495BFB8821919B9800C8779D /* RemoteConfigManager.swift in Sources */,
 				4982F51F2344A216008804B0 /* Cgo+Convert.swift in Sources */,
 				49722FF1211F338B00650A41 /* Witness.swift in Sources */,
 				49722FF0211F338B00650A41 /* EventStream.swift in Sources */,
+				0AE14FEF25A35685007EF89B /* BSBacktraceLogger.m in Sources */,
 				499A486522EEA3FD00F6C675 /* Array+Safe.swift in Sources */,
 				F92D0B24236BC12000575E15 /* SavedProxyModel.swift in Sources */,
 				F92D0B2A236C759100575E15 /* NSTextField+Vibrancy.swift in Sources */,
