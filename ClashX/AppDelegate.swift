@@ -64,6 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // crash recorder
         failLaunchProtect()
         registCrashLogger()
+        startAnrDetect()
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -771,6 +772,17 @@ extension AppDelegate {
             DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + Double(Int64(5 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
                 x.set(0, forKey: "launch_fail_times")
             })
+        #endif
+    }
+}
+
+// MARK: ANR
+extension AppDelegate {
+    private func startAnrDetect() {
+        #if DEBUG
+        return
+        #else
+        AnrDetectUtil.shared.start()
         #endif
     }
 }
