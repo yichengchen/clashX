@@ -58,17 +58,3 @@ lane :addKeyChain do
     )
   end
 end
-
-lane :setARM do
-update_xcodeproj(
-  xcodeproj: 'ClashX.xcodeproj',
-  options: {'ARCHS': 'arm64'} 
-)
-end
-
-lane :setUniversal do
-update_xcodeproj(
-  xcodeproj: 'ClashX.xcodeproj',
-  options: {'ARCHS': '$(ARCHS_STANDARD)'} 
-)
-end
