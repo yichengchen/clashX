@@ -146,7 +146,9 @@ class RemoteConfigManager {
         }
         urlRequest.cachePolicy = .reloadIgnoringCacheData
 
-        AF.request(urlRequest).responseString(encoding: .utf8) { res in
+        AF.request(urlRequest)
+          .validate()
+          .responseString(encoding: .utf8) { res in
             complete(try? res.result.get(), res.response?.suggestedFilename)
         }
     }
