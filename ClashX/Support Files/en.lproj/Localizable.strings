@@ -29,7 +29,7 @@
 "ClashX fail to create ~/.config/clash folder. Please check privileges or manually create folder and restart ClashX." = "ClashX fail to create ~/.config/clash folder. Please check privileges or manually create folder and restart ClashX.";
 
 /* No comment provided by engineer. */
-"ClashX needs to install/update a helper tool with administrator privileges to set system proxy quickly.If not helper tool installed, ClashX won't be able to set your system proxy" = "ClashX needs to install/update a helper tool with administrator privileges to set system proxy quickly.If not helper tool installed, ClashX won't be able to set your system proxy";
+"ClashX needs to install/update a helper tool with administrator privileges, otherwise ClashX won't be able to configure system proxy." = "ClashX needs to install/update a helper tool with administrator privileges, otherwise ClashX won't be able to configure system proxy.";
 
 /* No comment provided by engineer. */
 "ClashX Start Error!" = "ClashX Start Error!";
@@ -74,7 +74,7 @@
 "Invalid input" = "Invalid input";
 
 /* No comment provided by engineer. */
-"Lecgy Install" = "Lecgy Install";
+"Legacy Install" = "Legacy Install";
 
 /* No comment provided by engineer. */
 "Need to Restart the ClashX to Take effect, Please start clashX manually" = "Need to Restart the ClashX to Take effect, Please start clashX manually";

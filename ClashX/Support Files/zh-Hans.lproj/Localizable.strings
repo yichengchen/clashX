@@ -29,7 +29,7 @@
 "ClashX fail to create ~/.config/clash folder. Please check privileges or manually create folder and restart ClashX." = "ClashX 创建 ~/.config/clash 文件夹失败，请检查权限设置或者手动创建文件夹后重启 ClashX";
 
 /* No comment provided by engineer. */
-"ClashX needs to install/update a helper tool with administrator privileges to set system proxy quickly.If not helper tool installed, ClashX won't be able to set your system proxy" = "ClashX 需要使用管理员权限安装/更新一个帮助程序来帮助设置系统代理。如不安装,ClashX的设置系统代理功能将失效。";
+"ClashX needs to install/update a helper tool with administrator privileges, otherwise ClashX won't be able to configure system proxy." = "ClashX 需要使用管理员权限安装/更新一个帮助程序，否则 ClashX 将无法设置系统代理。";
 
 /* No comment provided by engineer. */
 "ClashX Start Error!" = "ClashX 启动出错";
@@ -74,7 +74,7 @@
 "Invalid input" = "输入不合法";
 
 /* No comment provided by engineer. */
-"Lecgy Install" = "传统安装";
+"Legacy Install" = "传统安装";
 
 /* No comment provided by engineer. */
 "Need to Restart the ClashX to Take effect, Please start clashX manually" = "需要重启ClashX生效，请手动启动ClashX";

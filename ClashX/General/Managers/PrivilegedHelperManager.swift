@@ -14,7 +14,7 @@ import RxCocoa
 class PrivilegedHelperManager {
     let isHelperCheckFinished = BehaviorRelay<Bool>(value: false)
     private var cancelInstallCheck = false
-    private var useLecgyInstall = false
+    private var useLegacyInstall = false
 
     private var authRef: AuthorizationRef?
     private var connection: NSXPCConnection?
@@ -96,7 +96,7 @@ class PrivilegedHelperManager {
         // Check if the authorization went succesfully
         guard authStatus == errAuthorizationSuccess else {
             Logger.log("Couldn't obtain admin privileges: \(authStatus)", level: .error)
-            return .getAdmainFail
+            return .getAdminFail
         }
 
         // Launch the privileged helper using SMJobBless tool
@@ -194,8 +194,8 @@ extension PrivilegedHelperManager {
             return
         }
 
-        if useLecgyInstall {
-            useLecgyInstall = false
+        if useLegacyInstall {
+            useLegacyInstall = false
             legacyInstallHelper()
             if !cancelInstallCheck {
                 checkInstall()
@@ -208,7 +208,7 @@ extension PrivilegedHelperManager {
             return
         }
         result.alertAction()
-        useLecgyInstall = result.shouldRetryLegacyWay()
+        useLegacyInstall = result.shouldRetryLegacyWay()
         NSAlert.alert(with: result.alertContent)
         if !cancelInstallCheck {
             checkInstall()
@@ -217,10 +217,10 @@ extension PrivilegedHelperManager {
 
     private func showInstallHelperAlert() -> Bool {
         let alert = NSAlert()
-        alert.messageText = NSLocalizedString("ClashX needs to install/update a helper tool with administrator privileges to set system proxy quickly.If not helper tool installed, ClashX won't be able to set your system proxy", comment: "")
+        alert.messageText = NSLocalizedString("ClashX needs to install/update a helper tool with administrator privileges, otherwise ClashX won't be able to configure system proxy.", comment: "")
         alert.alertStyle = .warning
-        if useLecgyInstall {
-            alert.addButton(withTitle: NSLocalizedString("Lecgy Install", comment: ""))
+        if useLegacyInstall {
+            alert.addButton(withTitle: NSLocalizedString("Legacy Install", comment: ""))
         } else {
             alert.addButton(withTitle: NSLocalizedString("Install", comment: ""))
         }
@@ -253,15 +253,15 @@ fileprivate struct AppAuthorizationRights {
 fileprivate enum DaemonInstallResult {
     case success
     case authorizationFail
-    case getAdmainFail
+    case getAdminFail
     case blessError(Int)
 
     var alertContent: String {
         switch self {
         case .success:
             return ""
-        case .authorizationFail: return "Create authorization fail!"
-        case .getAdmainFail: return "Get admain authorization fail!"
+        case .authorizationFail: return "Failed to create authorization!"
+        case .getAdminFail: return "Failed to get admin authorization!"
         case let .blessError(code):
             switch code {
             case kSMErrorInternalFailure: return "blessError: kSMErrorInternalFailure"
