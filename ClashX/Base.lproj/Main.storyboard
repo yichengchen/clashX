@@ -233,7 +233,7 @@
                                 <action selector="actionSetSystemProxy:" target="Voe-Tx-rLC" id="jrp-iz-ljC"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Copy shell command" keyEquivalent="c" id="Jmb-PK-rMW">
+                        <menuItem title="Copy shell command(Alt-Command-C for External IP)" keyEquivalent="c" id="Jmb-PK-rMW">
                             <connections>
                                 <action selector="actionCopyExportCommand:" target="Voe-Tx-rLC" id="82r-sY-7xb"/>
                             </connections>

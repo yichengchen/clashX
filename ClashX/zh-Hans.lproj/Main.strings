@@ -74,8 +74,8 @@
 /* Class = "NSMenuItem"; title = "API Connect Error"; ObjectID = "jGT-1M-xJu"; */
 "jGT-1M-xJu.title" = "API Connect Error";
 
-/* Class = "NSMenuItem"; title = "Copy shell command"; ObjectID = "Jmb-PK-rMW"; */
-"Jmb-PK-rMW.title" = "复制终端代理命令";
+/* Class = "NSMenuItem"; title = "Copy shell command(Alt-Command-C for External IP)"; ObjectID = "Jmb-PK-rMW"; */
+"Jmb-PK-rMW.title" = "复制终端代理命令(Alt-Command-C 外部IP)";
 
 /* Class = "NSMenuItem"; title = "Config"; ObjectID = "JMV-Dy-CI0"; */
 "JMV-Dy-CI0.title" = "配置";
