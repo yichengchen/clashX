@@ -81,4 +81,7 @@ Checkout [Clash](https://github.com/Dreamacro/clash) or [SS-Rule-Snippet for Cla
   clash://install-config?url=http%3A%2F%2Fexample.com&name=example
   ```
 
+### FAQ
 
+- Q: How to get shell command with external IP?  
+  A: Click the clashX menu icon and then press `Option-Command-C`  
